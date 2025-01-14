@@ -150,6 +150,12 @@ test.skip("Create a new invoice", async () => {
   assertIsInvoice(invoice);
 });
 
+test.skip("Delete invoice", async () => {
+  const invoiceId = "123";
+
+  await sevDeskClient.deleteInvoice({ id: invoiceId });
+});
+
 test("Get document folders", async () => {
   const { objects: documentFolders } = await sevDeskClient.getDocumentFolders();
 

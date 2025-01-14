@@ -138,6 +138,17 @@ export class SevDeskClient {
     });
   }
 
+  /**
+   * Delete a single invoice by id
+   */
+  async deleteInvoice(params: UrlParamsFor<"apiDeleteInvoiceUrl">) {
+    const url = this.urls.apiDeleteInvoiceUrl(params);
+
+    return this.request<{
+      objects: [null];
+    }>(url, { method: "DELETE" });
+  }
+
   // -------------------------------------------------------
   // DocumentFolder
   // -------------------------------------------------------
