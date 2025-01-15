@@ -59,6 +59,10 @@ export class SevDeskUrls {
     return this.apiUrl({ path: `Invoice/${id}`, query });
   }
 
+  apiInvoiceSendByUrl({ id, ...query }: { id: string } & Query) {
+    return this.apiUrl({ path: `Invoice/${id}/sendBy`, query });
+  }
+
   viewInvoiceUrl({ id }: { id: string }) {
     return `${this.baseUrl}#/fi/edit/type/RE/id/${id}`;
   }

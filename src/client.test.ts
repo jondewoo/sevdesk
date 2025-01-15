@@ -156,6 +156,18 @@ test.skip("Delete invoice", async () => {
   await sevDeskClient.deleteInvoice({ id: invoiceId });
 });
 
+test.skip("Mark invoice as sent", async () => {
+  const invoiceId = "88427544";
+
+  const { objects: invoice } = await sevDeskClient.markInvoiceAsSent(
+    { id: invoiceId },
+    "VM",
+    false
+  );
+
+  assertIsInvoice(invoice);
+});
+
 test("Get document folders", async () => {
   const { objects: documentFolders } = await sevDeskClient.getDocumentFolders();
 

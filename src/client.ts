@@ -149,6 +149,25 @@ export class SevDeskClient {
     }>(url, { method: "DELETE" });
   }
 
+  /**
+   * Mark a single invoice as sent
+   */
+  async markInvoiceAsSent(
+    params: UrlParamsFor<"apiInvoiceSendByUrl">,
+    sendType: string,
+    sendDraft: boolean
+  ) {
+    const url = this.urls.apiInvoiceSendByUrl(params);
+
+    return this.request<{
+      objects: Required<ModelInvoice>;
+    }>(url, {
+      method: "PUT",
+      body: JSON.stringify({ sendType, sendDraft }),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   // -------------------------------------------------------
   // DocumentFolder
   // -------------------------------------------------------
