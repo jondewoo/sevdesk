@@ -1336,6 +1336,12 @@ export interface ModelContact {
    * @memberof ModelContact
    */
   taxOffice?: string;
+  /**
+   * communication ways of the contact
+   * @type {Array<ModelCommunicationWay>}
+   * @memberof ModelContact
+   */
+  communicationWays?: Array<ModelCommunicationWay>;
 }
 /**
  *
