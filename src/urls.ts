@@ -67,6 +67,10 @@ export class SevDeskUrls {
     return `${this.baseUrl}#/fi/edit/type/RE/id/${id}`;
   }
 
+  apiGetInvoiceXmlUrl({ id }: { id: string }) {
+    return this.apiUrl({ path: `Invoice/${id}/getXml` });
+  }
+
   // -------------------------------------------------------
   // DocumentFolders
   // -------------------------------------------------------

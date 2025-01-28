@@ -234,6 +234,17 @@ test("Get unities", async () => {
   unities.forEach(assertIsUnity);
 });
 
+test("Get invoice XML", async () => {
+  const invoiceId = "123456";
+
+  const objects = await sevDeskClient.getInvoiceXml({
+    id: invoiceId,
+  });
+
+  assert.is(typeof objects, "string");
+  assert.is(objects.length > 0, true);
+});
+
 test("Get payment methods", async () => {
   const { objects: paymentMethods } = await sevDeskClient.getPaymentMethods();
 

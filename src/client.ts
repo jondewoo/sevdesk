@@ -168,6 +168,18 @@ export class SevDeskClient {
     });
   }
 
+  /**
+   * Get an xml object from invoice
+   */
+  async getInvoiceXml(params: UrlParamsFor<"apiGetInvoiceXmlUrl">) {
+    const url = this.urls.apiGetInvoiceXmlUrl(params);
+    const { objects } = await this.request<{ objects: string }>(url, {
+      method: "GET",
+    });
+
+    return objects;
+  }
+
   // -------------------------------------------------------
   // DocumentFolder
   // -------------------------------------------------------
