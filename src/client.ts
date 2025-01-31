@@ -14,6 +14,7 @@ import {
   ModelSevUser,
   ModelStaticCountry,
   ModelTag,
+  ModelTagRelation,
   ModelUnity,
 } from "./interfaces.js";
 import { SevDeskUrls } from "./urls.js";
@@ -345,6 +346,19 @@ export class SevDeskClient {
 
     return this.request<{ objects: Array<Required<ModelTag>> }>(url, {
       method: "GET",
+    });
+  }
+
+  /**
+   * Create a new tag
+   */
+  async createTag(name: string, object: { id: number; objectName: string }) {
+    const url = this.urls.apiCreateTagUrl();
+
+    return this.request<{ objects: Required<ModelTagRelation> }>(url, {
+      method: "POST",
+      body: JSON.stringify({ name, object }),
+      headers: { "Content-Type": "application/json" },
     });
   }
 

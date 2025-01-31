@@ -208,4 +208,15 @@ export class SevDeskUrls {
       query,
     });
   }
+
+  // -------------------------------------------------------
+  // Tag
+  // -------------------------------------------------------
+
+  apiCreateTagUrl({ ...query }: Query = {}) {
+    return this.apiUrl({
+      path: `Tag/Factory/create`,
+      query,
+    });
+  }
 }
