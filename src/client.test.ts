@@ -16,6 +16,7 @@ import {
   ModelSevUser,
   ModelStaticCountry,
   ModelTag,
+  ModelTagRelation,
   ModelUnity,
 } from "./interfaces.js";
 
@@ -259,6 +260,15 @@ test("Get tags", async () => {
   tags.forEach(assertIsTag);
 });
 
+test("Create a new tag", async () => {
+  const { objects: relation } = await sevDeskClient.createTag("NewTag", {
+    id: 123,
+    objectName: "Contact",
+  });
+
+  assertIsTagRelation(relation);
+});
+
 test("Get users", async () => {
   const { objects: users } = await sevDeskClient.getSevUsers();
 
@@ -314,6 +324,10 @@ const assertIsPaymentMethod = (paymentMethod: ModelPaymentMethod) => {
 
 const assertIsTag = (tag: ModelTag) => {
   assert.is(tag.objectName, "Tag");
+};
+
+const assertIsTagRelation = (tag: ModelTagRelation) => {
+  assert.is(tag.objectName, "TagRelation");
 };
 
 const assertIsSevUser = (user: ModelSevUser) => {
