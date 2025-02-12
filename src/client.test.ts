@@ -246,6 +246,16 @@ test("Get invoice XML", async () => {
   assert.is(objects.length > 0, true);
 });
 
+test("Get contacts with multiple tags", async () => {
+  const tagIds = ["123456", "45678"];
+
+  const contacts = await sevDeskClient.getContactsWithTags(tagIds);
+
+  assert.is(Array.isArray(contacts), true, "Should return an array");
+
+  contacts.forEach(assertIsContact);
+});
+
 test("Get payment methods", async () => {
   const { objects: paymentMethods } = await sevDeskClient.getPaymentMethods();
 
