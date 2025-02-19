@@ -181,23 +181,6 @@ export class SevDeskClient {
     return objects;
   }
 
-  async getContactsWithTags(tagIds: Array<string>) {
-    const queryParams = tagIds.reduce<Record<string, string>>(
-      (params, tagId, index) => {
-        params[`tags[${index}][id]`] = tagId;
-        params[`tags[${index}][objectName]`] = "Tag";
-
-        return params;
-      },
-      {}
-    );
-
-    // Fetch contacts from SevDesk API
-    const { objects: contacts } = await this.getContacts(queryParams);
-
-    return contacts;
-  }
-
   // -------------------------------------------------------
   // DocumentFolder
   // -------------------------------------------------------
@@ -273,6 +256,27 @@ export class SevDeskClient {
     return this.request<{ objects: Array<Required<ModelContact>> }>(url, {
       method: "GET",
     });
+  }
+
+  /**
+   * Get an overview of all contacts based on tagIds
+   *
+   */
+  async getContactsWithTags(tagIds: Array<string>) {
+    const queryParams = tagIds.reduce<Record<string, string>>(
+      (params, tagId, index) => {
+        params[`tags[${index}][id]`] = tagId;
+        params[`tags[${index}][objectName]`] = "Tag";
+
+        return params;
+      },
+      {}
+    );
+
+    // Fetch contacts from SevDesk API
+    const { objects: contacts } = await this.getContacts(queryParams);
+
+    return contacts;
   }
 
   // -------------------------------------------------------
