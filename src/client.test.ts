@@ -43,6 +43,16 @@ test("Get invoices", async () => {
   assertIsInvoice(invoice);
 });
 
+test("Get invoices with multiple tags", async () => {
+  const tagIds = ["123456", "45678"];
+
+  const invoices = await sevDeskClient.getInvoicesWithTags(tagIds);
+
+  assert.is(Array.isArray(invoices), true, "Should return an array");
+
+  invoices.forEach(assertIsInvoice);
+});
+
 test("Get next invoice number", async () => {
   const { objects: nextInvoiceNumber } =
     await sevDeskClient.getNextInvoiceNumber({
@@ -169,6 +179,17 @@ test.skip("Mark invoice as sent", async () => {
   assertIsInvoice(invoice);
 });
 
+test("Get invoice XML", async () => {
+  const invoiceId = "123456";
+
+  const objects = await sevDeskClient.getInvoiceXml({
+    id: invoiceId,
+  });
+
+  assert.is(typeof objects, "string");
+  assert.is(objects.length > 0, true);
+});
+
 test("Get document folders", async () => {
   const { objects: documentFolders } = await sevDeskClient.getDocumentFolders();
 
@@ -220,6 +241,16 @@ test("Get contact addresses (with contact ID)", async () => {
   contactAddresses.forEach(assertIsContactAddress);
 });
 
+test("Get contacts with multiple tags", async () => {
+  const tagIds = ["123456", "45678"];
+
+  const contacts = await sevDeskClient.getContactsWithTags(tagIds);
+
+  assert.is(Array.isArray(contacts), true, "Should return an array");
+
+  contacts.forEach(assertIsContact);
+});
+
 test("Get communication ways", async () => {
   const { objects: communicationWays } =
     await sevDeskClient.getCommunicationWays();
@@ -233,27 +264,6 @@ test("Get unities", async () => {
 
   assert.is(unities.length > 0, true);
   unities.forEach(assertIsUnity);
-});
-
-test("Get invoice XML", async () => {
-  const invoiceId = "123456";
-
-  const objects = await sevDeskClient.getInvoiceXml({
-    id: invoiceId,
-  });
-
-  assert.is(typeof objects, "string");
-  assert.is(objects.length > 0, true);
-});
-
-test("Get contacts with multiple tags", async () => {
-  const tagIds = ["123456", "45678"];
-
-  const contacts = await sevDeskClient.getContactsWithTags(tagIds);
-
-  assert.is(Array.isArray(contacts), true, "Should return an array");
-
-  contacts.forEach(assertIsContact);
 });
 
 test("Get payment methods", async () => {

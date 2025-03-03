@@ -181,6 +181,23 @@ export class SevDeskClient {
     return objects;
   }
 
+  async getInvoicesWithTags(tagIds: Array<string>) {
+    const queryParams = tagIds.reduce<Record<string, string>>(
+      (params, tagId, index) => {
+        params[`tags[${index}][id]`] = tagId;
+        params[`tags[${index}][objectName]`] = "Tag";
+
+        return params;
+      },
+      {}
+    );
+
+    // Fetch contacts from SevDesk API
+    const { objects: invoices } = await this.getInvoices(queryParams);
+
+    return invoices;
+  }
+
   // -------------------------------------------------------
   // DocumentFolder
   // -------------------------------------------------------
