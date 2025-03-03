@@ -22,7 +22,7 @@
   "browser": "./dist/main.js",
   "exports": {
     "node": {
-      "module": "./dist/node.js",
+      "import": "./dist/node.js",
       "require": "./dist/node.cjs"
     },
     "default": "./dist/main.js"
