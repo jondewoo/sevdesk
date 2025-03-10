@@ -5,8 +5,8 @@ export default defineConfig({
   entry: ["src/node.ts"],
   format: ["cjs", "esm"], // Build for commonJS and ESmodules
   // Generate declaration file (.d.ts)
-  dts: {
-    resolve: true,
+  experimentalDts: {
+    // resolve: true,
     compilerOptions: {
       module: "NodeNext",
       moduleResolution: "nodenext",
