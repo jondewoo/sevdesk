@@ -167,6 +167,16 @@ test.skip("Delete invoice", async () => {
   await sevDeskClient.deleteInvoice({ id: invoiceId });
 });
 
+test.skip("Cancel invoice", async () => {
+  const invoiceId = "123";
+
+  const {
+    objects: [invoice],
+  } = await sevDeskClient.cancelInvoice({ id: invoiceId });
+
+  assertIsInvoice(invoice);
+});
+
 test.skip("Mark invoice as sent", async () => {
   const invoiceId = "88427544";
 

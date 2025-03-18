@@ -71,6 +71,10 @@ export class SevDeskUrls {
     return this.apiUrl({ path: `Invoice/${id}/getXml` });
   }
 
+  apiCancelInvoiceUrl({ id }: { id: string }) {
+    return this.apiUrl({ path: `Invoice/${id}/cancelInvoice` });
+  }
+
   // -------------------------------------------------------
   // DocumentFolders
   // -------------------------------------------------------

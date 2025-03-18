@@ -151,6 +151,17 @@ export class SevDeskClient {
   }
 
   /**
+   * Cancel a single invoice by id
+   */
+  async cancelInvoice(params: UrlParamsFor<"apiCancelInvoiceUrl">) {
+    const url = this.urls.apiCancelInvoiceUrl(params);
+
+    return this.request<{
+      objects: [Required<ModelInvoice>];
+    }>(url, { method: "POST" });
+  }
+
+  /**
    * Mark a single invoice as sent
    */
   async markInvoiceAsSent(
