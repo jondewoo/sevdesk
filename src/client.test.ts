@@ -161,6 +161,30 @@ test.skip("Create a new invoice", async () => {
   assertIsInvoice(invoice);
 });
 
+test.skip("Update an existing invoice", async () => {
+  const invoiceId = "123";
+  const invoiceNumber = `TEST-${new Date().toISOString()}`;
+
+  const response = await sevDeskClient.updateInvoice({
+    id: invoiceId,
+    objectName: "Invoice",
+    header: invoiceNumber,
+    invoiceNumber,
+  });
+
+  console.log(response);
+  const { objects: invoice } = response;
+
+  assertIsInvoice(invoice);
+  assert.equal(invoice.id, invoiceId, "Invoice IDs should match");
+  assert.equal(invoice.header, invoiceNumber, "Invoice header should match");
+  assert.equal(
+    invoice.invoiceNumber,
+    invoiceNumber,
+    "Invoice numbers should match"
+  );
+});
+
 test.skip("Delete invoice", async () => {
   const invoiceId = "123";
 

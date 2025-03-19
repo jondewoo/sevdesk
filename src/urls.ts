@@ -55,6 +55,10 @@ export class SevDeskUrls {
     return this.apiUrl({ path: `Invoice/Factory/saveInvoice`, query });
   }
 
+  apiUpdateInvoiceUrl({ id, ...query }: { id: string } & Query) {
+    return this.apiUrl({ path: `Invoice/${id}`, query });
+  }
+
   apiDeleteInvoiceUrl({ id, ...query }: { id: string } & Query) {
     return this.apiUrl({ path: `Invoice/${id}`, query });
   }

@@ -140,6 +140,22 @@ export class SevDeskClient {
   }
 
   /**
+   * Update an existing invoice
+   */
+  async updateInvoice(invoice: ModelInvoice) {
+    if (!invoice.id) throw new Error("id is required");
+    const url = this.urls.apiUpdateInvoiceUrl({ id: invoice.id });
+
+    return this.request<{
+      objects: Required<ModelInvoice>;
+    }>(url, {
+      method: "PUT",
+      body: JSON.stringify(invoice),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  /**
    * Delete a single invoice by id
    */
   async deleteInvoice(params: UrlParamsFor<"apiDeleteInvoiceUrl">) {
