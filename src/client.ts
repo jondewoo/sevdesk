@@ -192,6 +192,9 @@ export class SevDeskClient {
     return objects;
   }
 
+  /**
+   * Get an overview of all invoices based on tagIds
+   */
   async getInvoicesWithTags(tagIds: Array<string>) {
     const queryParams = tagIds.reduce<Record<string, string>>(
       (params, tagId, index) => {
@@ -203,7 +206,7 @@ export class SevDeskClient {
       {}
     );
 
-    // Fetch contacts from SevDesk API
+    // Fetch invoices from SevDesk API
     const { objects: invoices } = await this.getInvoices(queryParams);
 
     return invoices;
