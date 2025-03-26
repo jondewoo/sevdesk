@@ -156,6 +156,15 @@ export class SevDeskClient {
   }
 
   /**
+   * Render a single invoice by id
+   */
+  async renderInvoice(params: UrlParamsFor<"apiRenderInvoiceUrl">) {
+    const url = this.urls.apiRenderInvoiceUrl(params);
+
+    return this.request(url, { method: "POST" });
+  }
+
+  /**
    * Delete a single invoice by id
    */
   async deleteInvoice(params: UrlParamsFor<"apiDeleteInvoiceUrl">) {

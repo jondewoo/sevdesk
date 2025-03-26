@@ -172,7 +172,6 @@ test.skip("Update an existing invoice", async () => {
     invoiceNumber,
   });
 
-  console.log(response);
   const { objects: invoice } = response;
 
   assertIsInvoice(invoice);
@@ -183,6 +182,14 @@ test.skip("Update an existing invoice", async () => {
     invoiceNumber,
     "Invoice numbers should match"
   );
+});
+
+test.skip("Render invoice", async () => {
+  const invoiceId = "123";
+
+  await sevDeskClient.renderInvoice({
+    id: invoiceId,
+  });
 });
 
 test.skip("Delete invoice", async () => {
