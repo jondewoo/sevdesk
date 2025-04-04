@@ -181,9 +181,9 @@ export class SevDeskClient {
   async cancelInvoice(params: UrlParamsFor<"apiCancelInvoiceUrl">) {
     const url = this.urls.apiCancelInvoiceUrl(params);
 
-    return this.request<{
-      objects: [Required<ModelInvoice>];
-    }>(url, { method: "POST" });
+    return this.request<{ objects: Required<ModelInvoice> }>(url, {
+      method: "POST",
+    });
   }
 
   /**
