@@ -18,6 +18,8 @@ import {
   ModelTag,
   ModelTagRelation,
   ModelUnity,
+  ModelVoucher,
+  ModelVoucherPos,
 } from "./interfaces.js";
 
 let sevDeskClient: SevDeskClient;
@@ -231,6 +233,26 @@ test("Get invoice XML", async () => {
   assert.is(objects.length > 0, true);
 });
 
+test("Get vouchers", async () => {
+  const { objects: vouchers } = await sevDeskClient.getVouchers();
+
+  console.log("vouchers", vouchers);
+  assert.is(vouchers.length > 0, true);
+  vouchers.forEach(assertIsVoucher);
+});
+
+test("Get voucher positions", async () => {
+  const voucherId = 123456789;
+  const { objects: voucherPositions } = await sevDeskClient.getVoucherPositions(
+    { voucherId }
+  );
+
+  console.log("voucherPos", voucherPositions);
+
+  assert.is(voucherPositions.length > 0, true);
+  voucherPositions.forEach(assertIsVoucherPos);
+});
+
 test("Get document folders", async () => {
   const { objects: documentFolders } = await sevDeskClient.getDocumentFolders();
 
@@ -353,6 +375,14 @@ test("Get parts", async () => {
 
 const assertIsInvoice = (invoice: ModelInvoice) => {
   assert.is(invoice.objectName, "Invoice");
+};
+
+const assertIsVoucher = (voucher: ModelVoucher) => {
+  assert.is(voucher.objectName, "Voucher");
+};
+
+const assertIsVoucherPos = (voucher: ModelVoucherPos) => {
+  assert.is(voucher.objectName, "VoucherPos");
 };
 
 const assertIsDocumentFolder = (document: ModelDocumentFolder) => {

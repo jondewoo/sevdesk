@@ -84,6 +84,32 @@ export class SevDeskUrls {
   }
 
   // -------------------------------------------------------
+  // Voucher
+  // -------------------------------------------------------
+
+  apiVoucherUrl({ ...query }: DefaultCollectionQuery & Query = {}) {
+    return this.apiUrl({ path: `Voucher`, query });
+  }
+
+  // -------------------------------------------------------
+  // VoucherPos
+  // -------------------------------------------------------
+
+  apiVoucherPosUrl({
+    voucherId,
+    ...query
+  }: {
+    voucherId?: number;
+  } & DefaultCollectionQuery &
+    Query = {}) {
+    const voucher = voucherId
+      ? { "voucher[id]": voucherId, "voucher[objectName]": "Voucher" }
+      : {};
+
+    return this.apiUrl({ path: `VoucherPos`, query: { ...voucher, ...query } });
+  }
+
+  // -------------------------------------------------------
   // DocumentFolders
   // -------------------------------------------------------
 

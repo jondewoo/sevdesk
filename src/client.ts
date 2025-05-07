@@ -16,6 +16,8 @@ import {
   ModelTag,
   ModelTagRelation,
   ModelUnity,
+  ModelVoucher,
+  ModelVoucherPos,
 } from "./interfaces.js";
 import { SevDeskUrls } from "./urls.js";
 
@@ -235,6 +237,40 @@ export class SevDeskClient {
     const { objects: invoices } = await this.getInvoices(queryParams);
 
     return invoices;
+  }
+
+  // -------------------------------------------------------
+  // Voucher
+  // -------------------------------------------------------
+
+  /**
+   * Get an overview of all vouchers
+   *
+   * @see https://api.sevdesk.de/#tag/Voucher
+   */
+  async getVouchers(params: UrlParamsFor<"apiVoucherUrl"> = {}) {
+    const url = this.urls.apiVoucherUrl(params);
+
+    return this.request<{
+      objects: Array<Required<ModelVoucher>>;
+    }>(url, { method: "GET" });
+  }
+
+  // -------------------------------------------------------
+  // VoucherPos
+  // -------------------------------------------------------
+
+  /**
+   * Get an overview of all voucher positions
+   *
+   * @see https://api.sevdesk.de/#tag/VoucherPos
+   */
+  async getVoucherPositions(params: UrlParamsFor<"apiVoucherPosUrl"> = {}) {
+    const url = this.urls.apiVoucherPosUrl(params);
+
+    return this.request<{
+      objects: Array<Required<ModelVoucherPos>>;
+    }>(url, { method: "GET" });
   }
 
   // -------------------------------------------------------
