@@ -94,6 +94,7 @@ export class SevDeskClient {
     const url = this.urls.apiGetInvoicesUrl(params);
 
     return this.request<{
+      total?: number;
       objects: Array<Required<ModelInvoice>>;
     }>(url, { method: "GET" });
   }
@@ -252,6 +253,7 @@ export class SevDeskClient {
     const url = this.urls.apiVoucherUrl(params);
 
     return this.request<{
+      total?: number;
       objects: Array<Required<ModelVoucher>>;
     }>(url, { method: "GET" });
   }
@@ -269,6 +271,7 @@ export class SevDeskClient {
     const url = this.urls.apiVoucherPosUrl(params);
 
     return this.request<{
+      total?: number;
       objects: Array<Required<ModelVoucherPos>>;
     }>(url, { method: "GET" });
   }
@@ -288,6 +291,7 @@ export class SevDeskClient {
     const url = this.urls.apiGetDocumentFoldersUrl(params);
 
     return this.request<{
+      total?: number;
       objects: Array<Required<ModelDocumentFolder>>;
     }>(url, { method: "GET" });
   }
@@ -304,7 +308,10 @@ export class SevDeskClient {
   async getDocuments(params: UrlParamsFor<"apiGetDocumentsUrl"> = {}) {
     const url = this.urls.apiGetDocumentsUrl(params);
 
-    return this.request<{ objects: Array<Required<ModelDocument>> }>(url, {
+    return this.request<{
+      total?: number;
+      objects: Array<Required<ModelDocument>>;
+    }>(url, {
       method: "GET",
     });
   }
@@ -345,7 +352,10 @@ export class SevDeskClient {
   async getContacts(params: UrlParamsFor<"apiGetContactsUrl"> = {}) {
     const url = this.urls.apiGetContactsUrl(params);
 
-    return this.request<{ objects: Array<Required<ModelContact>> }>(url, {
+    return this.request<{
+      total?: number;
+      objects: Array<Required<ModelContact>>;
+    }>(url, {
       method: "GET",
     });
   }
@@ -383,12 +393,12 @@ export class SevDeskClient {
   ) {
     const url = this.urls.apiGetContactAddressesUrl(params);
 
-    return this.request<{ objects: Array<Required<ModelContactAddress>> }>(
-      url,
-      {
-        method: "GET",
-      }
-    );
+    return this.request<{
+      total?: number;
+      objects: Array<Required<ModelContactAddress>>;
+    }>(url, {
+      method: "GET",
+    });
   }
 
   // -------------------------------------------------------
@@ -405,12 +415,12 @@ export class SevDeskClient {
   ) {
     const url = this.urls.apiGetCommunicationWaysUrl(params);
 
-    return this.request<{ objects: Array<Required<ModelCommunicationWay>> }>(
-      url,
-      {
-        method: "GET",
-      }
-    );
+    return this.request<{
+      total?: number;
+      objects: Array<Required<ModelCommunicationWay>>;
+    }>(url, {
+      method: "GET",
+    });
   }
 
   // -------------------------------------------------------
@@ -425,7 +435,10 @@ export class SevDeskClient {
   async getUnities(params: UrlParamsFor<"apiGetUnitiesUrl"> = {}) {
     const url = this.urls.apiGetUnitiesUrl(params);
 
-    return this.request<{ objects: Array<Required<ModelUnity>> }>(url, {
+    return this.request<{
+      total?: number;
+      objects: Array<Required<ModelUnity>>;
+    }>(url, {
       method: "GET",
     });
   }
@@ -442,7 +455,10 @@ export class SevDeskClient {
   ) {
     const url = this.urls.apiGetPaymentMethodsUrl(params);
 
-    return this.request<{ objects: Array<Required<ModelPaymentMethod>> }>(url, {
+    return this.request<{
+      total?: number;
+      objects: Array<Required<ModelPaymentMethod>>;
+    }>(url, {
       method: "GET",
     });
   }
@@ -457,9 +473,12 @@ export class SevDeskClient {
   async getTags(params: UrlParamsFor<"apiGetTagsUrl"> = {}) {
     const url = this.urls.apiGetTagsUrl(params);
 
-    return this.request<{ objects: Array<Required<ModelTag>> }>(url, {
-      method: "GET",
-    });
+    return this.request<{ total?: number; objects: Array<Required<ModelTag>> }>(
+      url,
+      {
+        method: "GET",
+      }
+    );
   }
 
   /**
@@ -485,7 +504,10 @@ export class SevDeskClient {
   async getSevUsers(params: UrlParamsFor<"apiGetSevUsersUrl"> = {}) {
     const url = this.urls.apiGetSevUsersUrl(params);
 
-    return this.request<{ objects: Array<Required<ModelSevUser>> }>(url, {
+    return this.request<{
+      total?: number;
+      objects: Array<Required<ModelSevUser>>;
+    }>(url, {
       method: "GET",
     });
   }
@@ -502,7 +524,10 @@ export class SevDeskClient {
   ) {
     const url = this.urls.apiGetStaticCountriesUrl(params);
 
-    return this.request<{ objects: Array<Required<ModelStaticCountry>> }>(url, {
+    return this.request<{
+      total?: number;
+      objects: Array<Required<ModelStaticCountry>>;
+    }>(url, {
       method: "GET",
     });
   }
@@ -517,7 +542,10 @@ export class SevDeskClient {
   async getParts(params: UrlParamsFor<"apiGetPartsUrl"> = {}) {
     const url = this.urls.apiGetPartsUrl(params);
 
-    return this.request<{ objects: Array<Required<ModelPart>> }>(url, {
+    return this.request<{
+      total?: number;
+      objects: Array<Required<ModelPart>>;
+    }>(url, {
       method: "GET",
     });
   }
