@@ -236,7 +236,6 @@ test("Get invoice XML", async () => {
 test("Get vouchers", async () => {
   const { objects: vouchers } = await sevDeskClient.getVouchers();
 
-  console.log("vouchers", vouchers);
   assert.is(vouchers.length > 0, true);
   vouchers.forEach(assertIsVoucher);
 });
@@ -246,8 +245,6 @@ test("Get voucher positions", async () => {
   const { objects: voucherPositions } = await sevDeskClient.getVoucherPositions(
     { voucherId }
   );
-
-  console.log("voucherPos", voucherPositions);
 
   assert.is(voucherPositions.length > 0, true);
   voucherPositions.forEach(assertIsVoucherPos);

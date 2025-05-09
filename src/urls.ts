@@ -6,6 +6,7 @@ type DefaultCollectionQuery = {
   limit?: number;
   offset?: number;
   embed?: Array<string>;
+  countAll?: boolean;
 };
 
 export class SevDeskUrls {
