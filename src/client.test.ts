@@ -276,6 +276,31 @@ test.skip("Add document", async () => {
   assertIsDocument(document);
 });
 
+// Manual test
+// If you run this test, you need to clean up manually afterwards
+test.skip("Create a new contact", async () => {
+  const { objects: contact } = await sevDeskClient.createContact({
+    name: "New Test Contact",
+    category: {
+      id: "3",
+      objectName: "Category",
+    },
+  });
+
+  assertIsContact(contact);
+});
+
+// Manual test
+// If you run this test, you need to clean up manually afterwards
+test.skip("Update an existing contact", async () => {
+  const { objects: contact } = await sevDeskClient.updateContact({
+    id: "105712620",
+    name: "Updated Test Contact",
+  });
+
+  assertIsContact(contact);
+});
+
 test("Get contacts", async () => {
   const { objects: contacts } = await sevDeskClient.getContacts();
 

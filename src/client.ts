@@ -345,6 +345,37 @@ export class SevDeskClient {
   // -------------------------------------------------------
 
   /**
+   * Create a new contact
+   */
+  async createContact(body: ModelContact) {
+    const url = this.urls.apiCreateContactUrl();
+
+    return this.request<{
+      objects: Required<ModelContact>;
+    }>(url, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  /**
+   * Update an existing contact
+   */
+  async updateContact(contact: ModelContact) {
+    if (!contact.id) throw new Error("id is required");
+    const url = this.urls.apiUpdateContactUrl({ id: contact.id });
+
+    return this.request<{
+      objects: Required<ModelContact>;
+    }>(url, {
+      method: "PUT",
+      body: JSON.stringify(contact),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  /**
    * Get an overview of all contacts
    *
    * @see https://my.sevdesk.de/swaggerUI/index.html#/Contact/getContacts
