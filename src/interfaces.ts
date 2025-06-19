@@ -1342,6 +1342,12 @@ export interface ModelContact {
    * @memberof ModelContact
    */
   communicationWays?: Array<ModelCommunicationWay>;
+  /**
+   * buyer reference of the contact
+   * @type {string}
+   * @memberof ModelContact
+   */
+  buyerReference?: string;
 }
 /**
  *
