@@ -294,7 +294,7 @@ test.skip("Create a new contact", async () => {
 // If you run this test, you need to clean up manually afterwards
 test.skip("Update an existing contact", async () => {
   const { objects: contact } = await sevDeskClient.updateContact({
-    id: "105712620",
+    id: "123456789",
     name: "Updated Test Contact",
   });
 
@@ -306,6 +306,50 @@ test("Get contacts", async () => {
 
   assert.is(contacts.length > 0, true);
   contacts.forEach(assertIsContact);
+});
+
+// Manual test
+// If you run this test, you need to clean up manually afterwards
+test.skip("Create a new contact address", async () => {
+  const { objects: contactAddress } = await sevDeskClient.createContactAddress({
+    contact: { id: "123456789", objectName: "Contact" },
+    street: "123 Main St",
+    zip: "12345",
+    city: "Anytown",
+    name: "Warehouse",
+    country: {
+      id: "1",
+      objectName: "StaticCountry",
+    },
+    category: {
+      id: "47",
+      objectName: "Category",
+    },
+  });
+
+  assertIsContactAddress(contactAddress);
+});
+
+// Manual test
+// If you run this test, you need to clean up manually afterwards
+test.skip("Update an existing contact address", async () => {
+  const { objects: contactAddress } = await sevDeskClient.updateContactAddress({
+    id: "123456789",
+    street: "456 Second Ave",
+    zip: "67890",
+    city: "Otherville",
+    name: "New Warehouse",
+    country: {
+      id: "1",
+      objectName: "StaticCountry",
+    },
+    category: {
+      id: "47",
+      objectName: "Category",
+    },
+  });
+
+  assertIsContactAddress(contactAddress);
 });
 
 test("Get contact addresses (without contact ID)", async () => {

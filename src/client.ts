@@ -417,6 +417,37 @@ export class SevDeskClient {
   // -------------------------------------------------------
 
   /**
+   * Create a new contact address
+   */
+  async createContactAddress(body: ModelContactAddress) {
+    const url = this.urls.apiCreateContactAddressUrl();
+
+    return this.request<{
+      objects: Required<ModelContactAddress>;
+    }>(url, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  /**
+   * Update an existing contact address
+   */
+  async updateContactAddress(address: ModelContactAddress) {
+    if (!address.id) throw new Error("id is required");
+    const url = this.urls.apiUpdateContactAddressUrl({ id: address.id });
+
+    return this.request<{
+      objects: Required<ModelContactAddress>;
+    }>(url, {
+      method: "PUT",
+      body: JSON.stringify(address),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  /**
    * Get an overview of all contact addresses
    */
   async getContactAddresses(

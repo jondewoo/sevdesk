@@ -163,6 +163,17 @@ export class SevDeskUrls {
   // ContactAddress
   // -------------------------------------------------------
 
+  apiCreateContactAddressUrl({ ...query }: Query = {}) {
+    return this.apiUrl({
+      path: `ContactAddress`,
+      query,
+    });
+  }
+
+  apiUpdateContactAddressUrl({ id, ...query }: { id: string } & Query) {
+    return this.apiUrl({ path: `ContactAddress/${id}`, query });
+  }
+
   apiGetContactAddressesUrl({
     contactId,
     ...query
