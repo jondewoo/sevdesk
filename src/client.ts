@@ -468,6 +468,39 @@ export class SevDeskClient {
   // -------------------------------------------------------
 
   /**
+   * Create a new communication way
+   */
+  async createCommunicationWay(body: ModelCommunicationWay) {
+    const url = this.urls.apiCreateCommunicationWayUrl();
+
+    return this.request<{
+      objects: Required<ModelCommunicationWay>;
+    }>(url, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  /**
+   * Update an existing communication way
+   */
+  async updateCommunicationWay(communicationWay: ModelCommunicationWay) {
+    if (!communicationWay.id) throw new Error("id is required");
+    const url = this.urls.apiUpdateCommunicationWayUrl({
+      id: communicationWay.id,
+    });
+
+    return this.request<{
+      objects: Required<ModelCommunicationWay>;
+    }>(url, {
+      method: "PUT",
+      body: JSON.stringify(communicationWay),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  /**
    * Get an overview of all communication ways
    *
    * @see https://my.sevdesk.de/swaggerUI/index.html#/CommunicationWay/getCommunicationWays

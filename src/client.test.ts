@@ -380,6 +380,35 @@ test("Get contacts with multiple tags", async () => {
   contacts.forEach(assertIsContact);
 });
 
+test.skip("Create a new communication way", async () => {
+  const { objects: communicationWay } =
+    await sevDeskClient.createCommunicationWay({
+      contact: {
+        id: "123456789",
+        objectName: "Contact",
+      },
+      type: ModelCommunicationWay.TypeEnum.EMAIL,
+      value: "test@example.com",
+      key: {
+        id: "8",
+        objectName: "CommunicationWayKey",
+      },
+    });
+
+  assertIsCommunicationWay(communicationWay);
+});
+
+test.skip("Update an existing communication way", async () => {
+  const communicationWayId = "123456789";
+  const { objects: communicationWay } =
+    await sevDeskClient.updateCommunicationWay({
+      id: communicationWayId,
+      value: "updated@example.com",
+    });
+
+  assertIsCommunicationWay(communicationWay);
+});
+
 test("Get communication ways", async () => {
   const { objects: communicationWays } =
     await sevDeskClient.getCommunicationWays();
