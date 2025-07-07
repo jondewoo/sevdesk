@@ -206,6 +206,10 @@ export class SevDeskUrls {
     return this.apiUrl({ path: `CommunicationWay/${id}`, query });
   }
 
+  apiDeleteCommunicationWayUrl({ id, ...query }: { id: string } & Query) {
+    return this.apiUrl({ path: `CommunicationWay/${id}`, query });
+  }
+
   apiGetCommunicationWaysUrl({
     ...query
   }: DefaultCollectionQuery & Query = {}) {

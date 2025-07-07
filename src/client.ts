@@ -501,6 +501,19 @@ export class SevDeskClient {
   }
 
   /**
+   * Delete a communication way
+   */
+  async deleteCommunicationWay(
+    params: UrlParamsFor<"apiDeleteCommunicationWayUrl">
+  ) {
+    const url = this.urls.apiDeleteCommunicationWayUrl(params);
+
+    return this.request<{
+      objects: [null];
+    }>(url, { method: "DELETE" });
+  }
+
+  /**
    * Get an overview of all communication ways
    *
    * @see https://my.sevdesk.de/swaggerUI/index.html#/CommunicationWay/getCommunicationWays

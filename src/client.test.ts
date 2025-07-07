@@ -409,6 +409,12 @@ test.skip("Update an existing communication way", async () => {
   assertIsCommunicationWay(communicationWay);
 });
 
+test.skip("Delete communication way", async () => {
+  const communicationWayId = "123456789";
+
+  await sevDeskClient.deleteCommunicationWay({ id: communicationWayId });
+});
+
 test("Get communication ways", async () => {
   const { objects: communicationWays } =
     await sevDeskClient.getCommunicationWays();
