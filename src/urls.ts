@@ -85,6 +85,22 @@ export class SevDeskUrls {
   }
 
   // -------------------------------------------------------
+  // Credit Note
+  // -------------------------------------------------------
+
+  apiGetCreditNotesUrl({ ...query }: DefaultCollectionQuery & Query = {}) {
+    return this.apiUrl({ path: `CreditNote`, query });
+  }
+
+  apiGetCreditNoteUrl({ id, ...query }: { id: string } & Query) {
+    return this.apiUrl({ path: `CreditNote/${id}`, query });
+  }
+
+  apiSaveCreditNoteUrl({ ...query }: Query = {}) {
+    return this.apiUrl({ path: `CreditNote/Factory/saveCreditNote`, query });
+  }
+
+  // -------------------------------------------------------
   // Voucher
   // -------------------------------------------------------
 

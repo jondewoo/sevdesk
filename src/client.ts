@@ -5,6 +5,8 @@ import {
   ModelCommunicationWay,
   ModelContact,
   ModelContactAddress,
+  ModelCreditNote,
+  ModelCreditNotePos,
   ModelDocument,
   ModelDocumentFolder,
   ModelInvoice,
@@ -240,6 +242,52 @@ export class SevDeskClient {
     return invoices;
   }
 
+  // -------------------------------------------------------
+  // Credit Note
+  // -------------------------------------------------------
+
+  /**
+   * Get an overview of all credit notes
+   */
+  async getCreditNotes(params: UrlParamsFor<"apiGetCreditNotesUrl"> = {}) {
+    const url = this.urls.apiGetCreditNotesUrl(params);
+
+    return this.request<{
+      total?: number;
+      objects: Array<Required<ModelCreditNote>>;
+    }>(url, { method: "GET" });
+  }
+
+  /**
+   * Get a single credit note by id
+   */
+  async getCreditNote(params: UrlParamsFor<"apiGetCreditNoteUrl">) {
+    const url = this.urls.apiGetCreditNoteUrl(params);
+
+    return this.request<{
+      objects: [Required<ModelCreditNote>];
+    }>(url, { method: "GET" });
+  }
+
+  /**
+   * Create a new credit note
+   */
+  async saveCreditNote(body: unknown) {
+    const url = this.urls.apiSaveCreditNoteUrl();
+
+    return this.request<{
+      objects: {
+        creditNote: Required<ModelCreditNote>;
+        creditNotePos: Array<Required<ModelCreditNotePos>>;
+      };
+    }>(url, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  /**
   // -------------------------------------------------------
   // Voucher
   // -------------------------------------------------------

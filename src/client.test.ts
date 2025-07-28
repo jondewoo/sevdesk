@@ -8,6 +8,7 @@ import {
   ModelCommunicationWay,
   ModelContact,
   ModelContactAddress,
+  ModelCreditNote,
   ModelDocument,
   ModelDocumentFolder,
   ModelInvoice,
@@ -76,7 +77,6 @@ test.skip("Create a new invoice", async () => {
     objects: { invoice },
   } = await sevDeskClient.saveInvoice({
     invoice: {
-      // id: null,
       objectName: "Invoice",
       invoiceNumber,
       contact: {
@@ -231,6 +231,75 @@ test("Get invoice XML", async () => {
 
   assert.is(typeof objects, "string");
   assert.is(objects.length > 0, true);
+});
+test.skip("Create a new credit note", async () => {
+  const contactId = 123456;
+  const contactPersonId = 123456;
+  const creditNoteNumber = `TEST-${new Date().toISOString()}`;
+
+  const {
+    objects: { creditNote },
+  } = await sevDeskClient.saveCreditNote({
+    creditNote: {
+      objectName: "CreditNote",
+      creditNoteNumber,
+      contact: {
+        id: contactId,
+        objectName: "Contact",
+      },
+      creditNoteDate: "01.01.2022",
+      header: "Credit Note",
+      headText: "header information",
+      footText: "footer information",
+      addressName: "name\nstreet\npostCode city",
+      addressCountry: {
+        id: "1",
+        objectName: "StaticCountry",
+      },
+      deliveryDate: "2025-07-28T00:00:00+02:00",
+      status: "100",
+      contactPerson: {
+        id: contactPersonId,
+        objectName: "SevUser",
+      },
+      address: "some street\n12345 some city",
+      paymentMethod: {
+        id: "21919",
+        objectName: "PaymentMethod",
+      },
+      bookingCategory: "PROVISION",
+      addressStreet: "some street",
+      addressZip: "12345",
+      addressCity: "some city",
+      propertyIsEInvoice: true,
+      currency: "EUR",
+      taxRate: "0",
+      taxType: "default",
+      taxSet: null,
+      mapAll: true,
+    },
+    creditNotePosSave: [
+      {
+        objectName: "CreditNotePos",
+        quantity: "1",
+        price: "100",
+        name: "Dragonglass",
+        priority: "100",
+        unity: {
+          id: "1",
+          objectName: "Unity",
+        },
+        taxRate: "19",
+        priceGross: "100",
+        priceTax: "0.1",
+        mapAll: true,
+      },
+    ],
+  });
+
+  console.log(creditNote);
+
+  assertIsCreditNote(creditNote);
 });
 
 test("Get vouchers", async () => {
@@ -476,6 +545,10 @@ test("Get parts", async () => {
 
 const assertIsInvoice = (invoice: ModelInvoice) => {
   assert.is(invoice.objectName, "Invoice");
+};
+
+const assertIsCreditNote = (creditNote: ModelCreditNote) => {
+  assert.is(creditNote.objectName, "CreditNote");
 };
 
 const assertIsVoucher = (voucher: ModelVoucher) => {

@@ -1505,6 +1505,387 @@ export interface ModelCostCentre {
 /**
  *
  * @export
+ * @interface ModelCreditNote
+ */
+export interface ModelCreditNote {
+  id?: string;
+  objectName?: "CreditNote";
+  /**
+   * date the credit note was created
+   * @type {Date}
+   * @memberof ModelCreditNote
+   */
+  create?: Date;
+  /**
+   * date the credit note was last updated
+   * @type {Date}
+   * @memberof ModelCreditNote
+   */
+  update?: Date;
+  /**
+   * whether the credit note is an e-invoice
+   * @type {boolean}
+   * @memberof ModelCreditNote
+   */
+  propertyIsEInvoice?: boolean;
+  /**
+   * the credit note number
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  creditNoteNumber?: string;
+  /**
+   * the contact used in the credit note
+   * @type {ModelContact}
+   * @memberof ModelCreditNote
+   */
+  contact?: ModelContact;
+  /**
+   * the credit note date
+   * @type {Date}
+   * @memberof ModelCreditNote
+   */
+  creditNoteDate?: Date;
+  /**
+   * please have a look in <a href='#tag/CreditNote/Status-of-credit-notes'>status of credit note</a> to see what the different status codes mean
+   * @type {number}
+   * @memberof ModelCreditNote
+   */
+  status?: number;
+  /**
+   * normally consist of prefix plus the creditNote number
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  header?: string;
+  /**
+   * certain html tags can be used here to format your text
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  headText?: string;
+  /**
+   * certain html tags can be used here to format your text
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  footText?: string;
+  /**
+   * can be omitted as complete address is defined in address
+   * @type {ModelStaticCountry}
+   * @memberof ModelCreditNote
+   */
+  addressCountry?: ModelStaticCountry;
+  /**
+   *
+   * @type {ModelSevUser}
+   * @memberof ModelCreditNote
+   */
+  createUser?: ModelSevUser;
+  /**
+   *
+   * @type {any}
+   * @memberof ModelCreditNote
+   */
+  sevClient?: any;
+  /**
+   *
+   * @type {Date}
+   * @memberof ModelCreditNote
+   */
+  deliveryDate?: Date;
+  /**
+   * defines if the client uses the small settlement scheme. If yes, the creditNote must not contain any vat
+   * @type {boolean}
+   * @memberof ModelCreditNote
+   */
+  smallSettlement?: boolean;
+  /**
+   *
+   * @type {ModelSevUser}
+   * @memberof ModelCreditNote
+   */
+  contactPerson?: ModelSevUser;
+  /**
+   * tax rate used when adding a value added tax regulation
+   * @type {number}
+   * @memberof ModelCreditNote
+   */
+  taxRate?: number;
+  /**
+   * additional text when adding a value added tax regulation
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  taxText?: ModelCreditNote.TaxTextEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  taxType?: ModelCreditNote.TaxTypeEnum;
+  /**
+   *
+   * @type {ModelPaymentMethod}
+   * @memberof ModelCreditNote
+   */
+  paymentMethod?: ModelPaymentMethod;
+  /**
+   *
+   * @type {ModelCostCentre}
+   * @memberof ModelCreditNote
+   */
+  costCentre?: ModelCostCentre;
+  /**
+   * the date the creditNote was sent to the customer
+   * @type {Date}
+   * @memberof ModelCreditNote
+   */
+  sendDate?: Date;
+  /**
+   * complete address of the recipient including name, street, city, zip and country.<br>\r\n     Line breaks can be used and will be displayed on the invoice pdf.
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  address?: string;
+  /**
+   * defines the booking category, for more information see the section [Credit note booking categories](#tag/CreditNote/Credit-note-booking-categories)
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  bookingCategory?: ModelCreditNote.CreditBookingCategoryEnum;
+  /**
+   * currency used in the creditNote. Needs to be currency code according to ISO-4217
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  currency?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  sumNet?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  sumTax?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  sumGross?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  sumDiscounts?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  sumNetForeignCurrency?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  sumTaxForeignCurrency?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  sumGrossForeignCurrency?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  sumDiscountsForeignCurrency?: string;
+  /**
+   * internal note of the customer. Contains data entered into field 'Referenz/Bestellnummer'
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  customerInternalNote?: string;
+  /**
+   * if true, the net amount of each position will be shown on the creditNote. Otherwise gross amount
+   * @type {boolean}
+   * @memberof ModelCreditNote
+   */
+  showNetAmount?: boolean;
+  /**
+   * type which was used to send the creditNote. IMPORTANT: Please refer to the creditNote section of the API-Overview to understand how this attribute can be used before using it!
+   * @type {string}
+   * @memberof ModelCreditNote
+   */
+  sendType?: string;
+}
+/**
+ * @export
+ * @namespace ModelCreditNote
+ */
+export namespace ModelCreditNote {
+  /**
+   * @export
+   * @enum {string}
+   */
+  export enum TaxTextEnum {
+    UmsatzsteuerAusweisen = "Umsatzsteuer ausweisen",
+    SteuerfreieInnergemeinschaftlicheLieferungEuropischeUnion = "Steuerfreie innergemeinschaftliche Lieferung(Europäische Union)",
+    SteuerschuldnerschaftDesLeistungsempfngersAuerhalbEUZBSchweiz = "Steuerschuldnerschaft des Leistungsempfängers (Außerhalb EU, z.B. Schweiz)",
+  }
+  /**
+   * @export
+   * @enum {string}
+   */
+  export enum TaxTypeEnum {
+    Default = "default",
+    Eu = "eu",
+    Noteu = "noteu",
+  }
+  /**
+   * @export
+   * @enum {string}
+   */
+  export enum InvoiceTypeEnum {
+    REInvoice = "RE (Invoice)",
+    MAInvoiceReminder = "MA (Invoice reminder)",
+    WKRPeriodicInvoice = "WKR (periodic invoice)",
+  }
+  /**
+   * @export
+   * @enum {string}
+   */
+  export enum CreditBookingCategoryEnum {
+    Provision = "PROVISION",
+    RoyaltyAssigned = "ROYALTY_ASSIGNED",
+    RoyaltyUnassigned = "ROYALTY_UNASSIGNED",
+    Underachievement = "UNDERACHIEVEMENT",
+    AccountingType = "ACCOUNTING_TYPE",
+  }
+}
+/**
+ *
+ * @export
+ * @interface ModelCreditNotePos
+ */
+export interface ModelCreditNotePos {
+  id?: string;
+  objectName?: "CreditNotePos";
+  /**
+   * date the credit note position was created
+   * @type {Date}
+   * @memberof ModelCreditNotePos
+   */
+  create?: Date;
+  /**
+   * date the credit note position was last updated
+   * @type {Date}
+   * @memberof ModelCreditNotePos
+   */
+  update?: Date;
+  /**
+   * the creditNote to which the position belongs. <span style='color:red'>Required</span> if you want to create/update an credit note position for an existing credit note
+   * @type {ModelCreditNote}
+   * @memberof ModelCreditNotePos
+   */
+  creditNote?: ModelCreditNote;
+  /**
+   * part from your inventory which is used in the position.
+   * @type {ModelPart}
+   * @memberof ModelCreditNotePos
+   */
+  part?: ModelPart;
+  /**
+   * quantity of the article/part
+   * @type {number}
+   * @memberof ModelCreditNotePos
+   */
+  quantity?: number;
+  /**
+   * price of the article/part. Is either gross or net, depending on the sevdesk account setting.
+   * @type {number}
+   * @memberof ModelCreditNotePos
+   */
+  price?: number;
+  /**
+   * net price of the part
+   * @type {number}
+   * @memberof ModelCreditNotePos
+   */
+  priceNet?: number;
+  /**
+   * tax on the price of the part
+   * @type {number}
+   * @memberof ModelCreditNotePos
+   */
+  priceTax?: number;
+  /**
+   * gross price of the part
+   * @type {number}
+   * @memberof ModelCreditNotePos
+   */
+  priceGross?: number;
+  /**
+   * name of the article/part.
+   * @type {string}
+   * @memberof ModelCreditNotePos
+   */
+  name?: string;
+  /**
+   * the unit in which the positions part is measured
+   * @type {ModelUnity}
+   * @memberof ModelCreditNotePos
+   */
+  unit?: ModelUnity;
+  /**
+   * client to which creditNote position belongs. Will be filled automatically
+   * @type {ModelSevClient}
+   * @memberof ModelCreditNotePos
+   */
+  sevClient?: ModelSevClient;
+  /**
+   * position number of your position. Can be used to creditNote multiple positions.
+   * @type {number}
+   * @memberof ModelCreditNotePos
+   */
+  positionNumber?: number;
+  /**
+   * a text describing your position.
+   * @type {string}
+   * @memberof ModelCreditNotePos
+   */
+  text?: string;
+  /**
+   * an optional discount of the position.
+   * @type {number}
+   * @memberof ModelCreditNotePos
+   */
+  discount?: number;
+  /**
+   * tax rate of the position.
+   * @type {number}
+   * @memberof ModelCreditNotePos
+   */
+  taxRate?: number;
+  /**
+   * discount sum of the position
+   * @type {number}
+   * @memberof ModelCreditNotePos
+   */
+  sumDiscount?: number;
+}
+
+/**
+ *
+ * @export
  * @interface ModelCurrencyExchangeRate
  */
 export interface ModelCurrencyExchangeRate {
