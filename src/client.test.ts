@@ -256,6 +256,16 @@ test("Get credit notes", async () => {
   assertIsCreditNote(creditNote[0]);
 });
 
+test("Get next credit note number", async () => {
+  const { objects: nextCreditNoteNumber } =
+    await sevDeskClient.getNextCreditNoteNumber({
+      creditNoteType: "CN",
+      useNextNumber: false,
+    });
+
+  assert.type(nextCreditNoteNumber, "string");
+});
+
 test.skip("Create a new credit note", async () => {
   const contactId = 123456;
   const contactPersonId = 123456;

@@ -270,6 +270,19 @@ export class SevDeskClient {
   }
 
   /**
+   * Get the next credit note number
+   */
+  async getNextCreditNoteNumber(
+    params: UrlParamsFor<"apiGetNextCreditNoteNumberUrl">
+  ) {
+    const url = this.urls.apiGetNextCreditNoteNumberUrl(params);
+
+    return this.request<{
+      objects: string;
+    }>(url, { method: "GET" });
+  }
+
+  /**
    * Create a new credit note
    */
   async saveCreditNote(body: unknown) {

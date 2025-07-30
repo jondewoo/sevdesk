@@ -96,6 +96,15 @@ export class SevDeskUrls {
     return this.apiUrl({ path: `CreditNote/${id}`, query });
   }
 
+  apiGetNextCreditNoteNumberUrl({
+    ...query
+  }: { creditNoteType: string; useNextNumber: boolean } & Query) {
+    return this.apiUrl({
+      path: `CreditNote/Factory/getNextCreditNoteNumber`,
+      query,
+    });
+  }
+
   apiSaveCreditNoteUrl({ ...query }: Query = {}) {
     return this.apiUrl({ path: `CreditNote/Factory/saveCreditNote`, query });
   }
