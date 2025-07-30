@@ -163,6 +163,8 @@ test.skip("Create a new invoice", async () => {
   assertIsInvoice(invoice);
 });
 
+// Manual test
+// If you run this test, you need to clean up manually afterwards
 test.skip("Update an existing invoice", async () => {
   const invoiceId = "123";
   const invoiceNumber = `TEST-${new Date().toISOString()}`;
@@ -186,6 +188,8 @@ test.skip("Update an existing invoice", async () => {
   );
 });
 
+// Manual test
+// If you run this test, you need to clean up manually afterwards
 test.skip("Render invoice", async () => {
   const invoiceId = "123";
 
@@ -194,6 +198,8 @@ test.skip("Render invoice", async () => {
   });
 });
 
+// Manual test
+// If you run this test, you need to clean up manually afterwards
 test.skip("Delete invoice", async () => {
   const invoiceId = "123";
 
@@ -210,6 +216,8 @@ test("Cancel invoice", async () => {
   assertIsInvoice(invoice);
 });
 
+// Manual test
+// If you run this test, you need to clean up manually afterwards
 test.skip("Mark invoice as sent", async () => {
   const invoiceId = "123";
 
@@ -378,7 +386,7 @@ test("Get credit note XML", async () => {
   assert.is(objects.length > 0, true);
 });
 
-test.only("Get credit notes with tags", async () => {
+test("Get credit notes with tags", async () => {
   const tagIds = ["123456", "45678"];
 
   const creditNotes = await sevDeskClient.getCreditNotesWithTags(tagIds);
@@ -550,6 +558,8 @@ test("Get contacts with multiple tags", async () => {
   contacts.forEach(assertIsContact);
 });
 
+// Manual test
+// If you run this test, you need to clean up manually afterwards
 test.skip("Create a new communication way", async () => {
   const { objects: communicationWay } =
     await sevDeskClient.createCommunicationWay({
@@ -568,6 +578,8 @@ test.skip("Create a new communication way", async () => {
   assertIsCommunicationWay(communicationWay);
 });
 
+// Manual test
+// If you run this test, you need to clean up manually afterwards
 test.skip("Update an existing communication way", async () => {
   const communicationWayId = "123456789";
   const { objects: communicationWay } =
@@ -579,6 +591,8 @@ test.skip("Update an existing communication way", async () => {
   assertIsCommunicationWay(communicationWay);
 });
 
+// Manual test
+// If you run this test, you need to clean up manually afterwards
 test.skip("Delete communication way", async () => {
   const communicationWayId = "123456789";
 
@@ -614,7 +628,9 @@ test("Get tags", async () => {
   tags.forEach(assertIsTag);
 });
 
-test("Create a new tag", async () => {
+// Manual test
+// If you run this test, you need to clean up manually afterwards
+test.skip("Create a new tag", async () => {
   const { objects: relation } = await sevDeskClient.createTag("NewTag", {
     id: 123,
     objectName: "Contact",
