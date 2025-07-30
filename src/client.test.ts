@@ -232,6 +232,22 @@ test("Get invoice XML", async () => {
   assert.is(typeof objects, "string");
   assert.is(objects.length > 0, true);
 });
+
+test("Get credit notes", async () => {
+  const { objects: creditNotes } = await sevDeskClient.getCreditNotes();
+
+  assert.is(creditNotes.length > 0, true);
+  creditNotes.forEach(assertIsCreditNote);
+
+  const [firstCreditNote] = creditNotes;
+
+  const { objects: creditNote } = await sevDeskClient.getCreditNote({
+    id: firstCreditNote.id,
+  });
+
+  assertIsCreditNote(creditNote[0]);
+});
+
 test.skip("Create a new credit note", async () => {
   const contactId = 123456;
   const contactPersonId = 123456;
@@ -302,6 +318,91 @@ test.skip("Create a new credit note", async () => {
   assertIsCreditNote(creditNote);
 });
 
+// Manual test
+// If you run this test, you need to clean up manually afterwards
+test.skip("Update an existing credit note", async () => {
+  const creditNoteId = "123456";
+  const creditNoteNumber = `TEST-${new Date().toISOString()}`;
+
+  const response = await sevDeskClient.updateCreditNote({
+    id: creditNoteId,
+    objectName: "CreditNote",
+    header: creditNoteNumber,
+    creditNoteNumber,
+  });
+
+  const { objects: creditNote } = response;
+
+  console.log(creditNote);
+
+  assertIsCreditNote(creditNote);
+  assert.equal(creditNote.id, creditNoteId, "Credit note IDs should match");
+  assert.equal(
+    creditNote.header,
+    creditNoteNumber,
+    "Credit note header should match"
+  );
+  assert.equal(
+    creditNote.creditNoteNumber,
+    creditNoteNumber,
+    "Credit note numbers should match"
+  );
+});
+
+// Manual test
+// If you run this test, you need to clean up manually afterwards
+test.skip("Delete a credit note", async () => {
+  const creditNoteId = "123456";
+
+  await sevDeskClient.deleteCreditNote({ id: creditNoteId });
+});
+
+test("Render a credit note", async () => {
+  const creditNoteId = "123456";
+
+  try {
+    await sevDeskClient.renderCreditNote({ id: creditNoteId });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+test("Get credit note XML", async () => {
+  const creditNoteId = "123456";
+
+  const objects = await sevDeskClient.getCreditNoteXml({ id: creditNoteId });
+
+  console.log(objects);
+
+  assert.is(typeof objects, "string");
+  assert.is(objects.length > 0, true);
+});
+
+test.only("Get credit notes with tags", async () => {
+  const tagIds = ["123456", "45678"];
+
+  const creditNotes = await sevDeskClient.getCreditNotesWithTags(tagIds);
+
+  console.log(creditNotes);
+
+  assert.is(Array.isArray(creditNotes), true, "Should return an array");
+
+  creditNotes.forEach(assertIsCreditNote);
+});
+
+// Manual test
+// If you run this test, you need to clean up manually afterwards
+test.skip("Mark credit note as sent", async () => {
+  const creditNoteId = "123456";
+
+  const { objects: creditNote } = await sevDeskClient.markCreditNoteAsSent(
+    { id: creditNoteId },
+    "VM",
+    false
+  );
+
+  assertIsCreditNote(creditNote);
+});
 test("Get vouchers", async () => {
   const { objects: vouchers } = await sevDeskClient.getVouchers();
 

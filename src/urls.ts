@@ -100,6 +100,26 @@ export class SevDeskUrls {
     return this.apiUrl({ path: `CreditNote/Factory/saveCreditNote`, query });
   }
 
+  apiUpdateCreditNoteUrl({ id, ...query }: { id: string } & Query) {
+    return this.apiUrl({ path: `CreditNote/${id}`, query });
+  }
+
+  apiDeleteCreditNoteUrl({ id, ...query }: { id: string } & Query) {
+    return this.apiUrl({ path: `CreditNote/${id}`, query });
+  }
+
+  apiRenderCreditNoteUrl({ id, ...query }: { id: string } & Query) {
+    return this.apiUrl({ path: `CreditNote/${id}/render`, query });
+  }
+
+  apiGetCreditNoteXmlUrl({ id }: { id: string }) {
+    return this.apiUrl({ path: `CreditNote/${id}/getXml` });
+  }
+
+  apiCreditNoteSendByUrl({ id, ...query }: { id: string } & Query) {
+    return this.apiUrl({ path: `CreditNote/${id}/sendBy`, query });
+  }
+
   // -------------------------------------------------------
   // Voucher
   // -------------------------------------------------------

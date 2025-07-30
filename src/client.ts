@@ -288,6 +288,91 @@ export class SevDeskClient {
   }
 
   /**
+   * Update an existing credit note
+   */
+  async updateCreditNote(creditNote: ModelCreditNote) {
+    if (!creditNote.id) throw new Error("id is required");
+    const url = this.urls.apiUpdateCreditNoteUrl({ id: creditNote.id });
+
+    return this.request<{
+      objects: Required<ModelCreditNote>;
+    }>(url, {
+      method: "PUT",
+      body: JSON.stringify(creditNote),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  /**
+   * Delete a single credit note by id
+   */
+  async deleteCreditNote(params: UrlParamsFor<"apiDeleteCreditNoteUrl">) {
+    const url = this.urls.apiDeleteCreditNoteUrl(params);
+
+    return this.request<{ objects: [null] }>(url, { method: "DELETE" });
+  }
+
+  /**
+   * Render a single credit note by id
+   */
+  async renderCreditNote(params: UrlParamsFor<"apiRenderCreditNoteUrl">) {
+    const url = this.urls.apiRenderCreditNoteUrl(params);
+
+    return this.request(url, { method: "POST" });
+  }
+
+  /**
+   * Get an xml object from credit note
+   */
+  async getCreditNoteXml(params: UrlParamsFor<"apiGetCreditNoteXmlUrl">) {
+    const url = this.urls.apiGetCreditNoteXmlUrl(params);
+    const { objects } = await this.request<{ objects: string }>(url, {
+      method: "GET",
+    });
+
+    return objects;
+  }
+
+  /**
+   * Mark a single credit note as sent
+   */
+  async markCreditNoteAsSent(
+    params: UrlParamsFor<"apiCreditNoteSendByUrl">,
+    sendType: string,
+    sendDraft: boolean
+  ) {
+    const url = this.urls.apiCreditNoteSendByUrl(params);
+
+    return this.request<{
+      objects: Required<ModelCreditNote>;
+    }>(url, {
+      method: "PUT",
+      body: JSON.stringify({ sendType, sendDraft }),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  /**
+   * Get credit notes with tags
+   */
+  async getCreditNotesWithTags(tagIds: Array<string>) {
+    const queryParams = tagIds.reduce<Record<string, string>>(
+      (params, tagId, index) => {
+        params[`tags[${index}][id]`] = tagId;
+        params[`tags[${index}][objectName]`] = "Tag";
+
+        return params;
+      },
+      {}
+    );
+
+    // Fetch credit notes from SevDesk API
+    const { objects: creditNotes } = await this.getCreditNotes(queryParams);
+
+    return creditNotes;
+  }
+
+  /**
   // -------------------------------------------------------
   // Voucher
   // -------------------------------------------------------
