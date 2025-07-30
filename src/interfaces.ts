@@ -2471,6 +2471,12 @@ export interface ModelInvoice {
   id?: string;
   objectName?: "Invoice";
   /**
+   * whether the invoice is an e-invoice
+   * @type {boolean}
+   * @memberof ModelInvoice
+   */
+  propertyIsEInvoice?: boolean;
+  /**
    *
    * @type {string}
    * @memberof ModelInvoice
