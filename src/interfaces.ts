@@ -2766,70 +2766,70 @@ export interface ModelInvoice {
   currency?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  sumNet?: number;
+  sumNet?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  sumTax?: number;
+  sumTax?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  sumGross?: number;
+  sumGross?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  sumDiscounts?: number;
+  sumDiscounts?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  sumNetForeignCurrency?: number;
+  sumNetForeignCurrency?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  sumTaxForeignCurrency?: number;
+  sumTaxForeignCurrency?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  sumGrossForeignCurrency?: number;
+  sumGrossForeignCurrency?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  sumDiscountsForeignCurrency?: number;
+  sumDiscountsForeignCurrency?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  sumNetAccounting?: number;
+  sumNetAccounting?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  sumTaxAccounting?: number;
+  sumTaxAccounting?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  sumGrossAccounting?: number;
+  sumGrossAccounting?: string;
   /**
    *
    * @type {ModelEntryType}
@@ -3091,64 +3091,64 @@ export interface ModelInvoicePos {
   temporary?: boolean;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  sumNet?: number;
+  sumNet?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  sumGross?: number;
+  sumGross?: string;
   /**
    * does not get filled, sumDiscount is handled in the discount_model
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  sumDiscount?: number;
+  sumDiscount?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  sumTax?: number;
+  sumTax?: string;
   /**
    * equals sumNet
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  sumNetAccounting?: number;
+  sumNetAccounting?: string;
   /**
    * equals sumTax
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  sumTaxAccounting?: number;
+  sumTaxAccounting?: string;
   /**
    * equals sumGross
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  sumGrossAccounting?: number;
+  sumGrossAccounting?: string;
   /**
    * net price of the product/part (one)
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  priceNet?: number;
+  priceNet?: string;
   /**
    * gross price of the product/part (one)
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  priceGross?: number;
+  priceGross?: string;
   /**
    *
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  priceTax?: number;
+  priceTax?: string;
 }
 /**
  *
