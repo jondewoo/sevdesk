@@ -1805,34 +1805,34 @@ export interface ModelCreditNotePos {
   part?: ModelPart;
   /**
    * quantity of the article/part
-   * @type {number}
+   * @type {string}
    * @memberof ModelCreditNotePos
    */
-  quantity?: number;
+  quantity?: string;
   /**
    * price of the article/part. Is either gross or net, depending on the sevdesk account setting.
-   * @type {number}
+   * @type {string}
    * @memberof ModelCreditNotePos
    */
-  price?: number;
+  price?: string;
   /**
    * net price of the part
-   * @type {number}
+   * @type {string}
    * @memberof ModelCreditNotePos
    */
-  priceNet?: number;
+  priceNet?: string;
   /**
    * tax on the price of the part
-   * @type {number}
+   * @type {string}
    * @memberof ModelCreditNotePos
    */
-  priceTax?: number;
+  priceTax?: string;
   /**
    * gross price of the part
    * @type {number}
    * @memberof ModelCreditNotePos
    */
-  priceGross?: number;
+  priceGross?: string;
   /**
    * name of the article/part.
    * @type {string}
@@ -1865,22 +1865,22 @@ export interface ModelCreditNotePos {
   text?: string;
   /**
    * an optional discount of the position.
-   * @type {number}
+   * @type {string}
    * @memberof ModelCreditNotePos
    */
-  discount?: number;
+  discount?: string;
   /**
    * tax rate of the position.
-   * @type {number}
+   * @type {string}
    * @memberof ModelCreditNotePos
    */
-  taxRate?: number;
+  taxRate?: string;
   /**
    * discount sum of the position
-   * @type {number}
+   * @type {string}
    * @memberof ModelCreditNotePos
    */
-  sumDiscount?: number;
+  sumDiscount?: string;
 }
 
 /**
@@ -3025,16 +3025,16 @@ export interface ModelInvoicePos {
   part?: ModelPart;
   /**
    * the quantity of the product/part
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  quantity?: number;
+  quantity?: string;
   /**
    * the price of the product/part
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  price?: number;
+  price?: string;
   /**
    * the name of the product/part
    * @type {string}
@@ -3073,16 +3073,16 @@ export interface ModelInvoicePos {
   text?: string;
   /**
    * does not get filled, discount is handled in the discount_model
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  discount?: number;
+  discount?: string;
   /**
    * tax rate in percent
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoicePos
    */
-  taxRate?: number;
+  taxRate?: string;
   /**
    *
    * @type {boolean}
