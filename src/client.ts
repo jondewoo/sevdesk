@@ -491,6 +491,17 @@ export class SevDeskClient {
   // -------------------------------------------------------
 
   /**
+   * Get a single contact by id
+   */
+  async getContact(params: UrlParamsFor<"apiGetContactUrl">) {
+    const url = this.urls.apiGetContactUrl(params);
+
+    return this.request<{ objects: [Required<ModelContact>] }>(url, {
+      method: "GET",
+    });
+  }
+
+  /**
    * Create a new contact
    */
   async createContact(body: ModelContact) {

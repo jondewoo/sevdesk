@@ -464,6 +464,17 @@ test.skip("Add document", async () => {
   assertIsDocument(document);
 });
 
+test("Get contact", async () => {
+  const contactId = "123456789";
+  const {
+    objects: [contact],
+  } = await sevDeskClient.getContact({
+    id: contactId,
+  });
+
+  assertIsContact(contact);
+});
+
 // Manual test
 // If you run this test, you need to clean up manually afterwards
 test.skip("Create a new contact", async () => {
