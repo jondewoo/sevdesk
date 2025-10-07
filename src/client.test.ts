@@ -649,6 +649,12 @@ test("Get tags", async () => {
   tags.forEach(assertIsTag);
 });
 
+test("Get tag with name", async () => {
+  const tag = await sevDeskClient.getTagWithName("NewTag");
+
+  assertIsTag(tag);
+});
+
 // Manual test
 // If you run this test, you need to clean up manually afterwards
 test.skip("Create a new tag", async () => {

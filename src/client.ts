@@ -769,6 +769,28 @@ export class SevDeskClient {
   }
 
   /**
+   * Get a tag by name
+   */
+
+  async getTagWithName(name: string) {
+    const url = this.urls.apiGetTagsUrl({ nameStartsWith: name });
+    const result = await this.request<{
+      total?: number;
+      objects: Array<Required<ModelTag>>;
+    }>(url, {
+      method: "GET",
+    });
+
+    const tag = result.objects.find((tag) => tag.name === name);
+
+    if (!tag) {
+      throw new Error(`Tag with name ${name} not found`);
+    }
+
+    return tag;
+  }
+
+  /**
    * Create a new tag
    */
   async createTag(name: string, object: { id: number; objectName: string }) {
