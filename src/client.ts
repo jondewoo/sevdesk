@@ -47,37 +47,59 @@ export class SevDeskClient {
     this.urls = new SevDeskUrls(baseUrl);
   }
 
-  async request<ResponseBody>(url: string | URL, options: RequestInit = {}) {
+  async request<ResponseBody>(
+    url: string | URL,
+    options: RequestInit & { timeout?: number } = {}
+  ) {
     const { apiKey } = this.config;
 
-    const response = await dependencies.fetch(url.toString(), {
-      ...options,
-      headers: {
-        Authorization: apiKey,
-        Accept: "application/json",
-        ...options.headers,
-      },
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, options.timeout ?? 5000);
+
     let body;
-    let error;
 
     try {
-      body = await response.json();
-    } catch (err: any) {
-      error = err;
-    }
+      const response = await dependencies.fetch(url.toString(), {
+        ...options,
+        headers: {
+          Authorization: apiKey,
+          Accept: "application/json",
+          ...options.headers,
+        },
+        signal: controller.signal,
+      });
 
-    if (body?.error !== undefined) {
-      const error = new Error();
+      let error;
 
-      Object.assign(error, body.error);
+      try {
+        body = await response.json();
+      } catch (err: any) {
+        error = err;
+      }
 
-      throw error;
-    }
-    if (response.ok === false || error) {
-      const message = error?.message ?? body?.error?.message ?? body.message;
+      if (body?.error !== undefined) {
+        const error = new Error();
 
-      throw new UnknownApiError(message, { response });
+        Object.assign(error, body.error);
+
+        throw error;
+      }
+      if (response.ok === false || error) {
+        const message = error?.message ?? body?.error?.message ?? body.message;
+
+        throw new UnknownApiError(message, { response });
+      }
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message === "The user aborted a request."
+      ) {
+        throw new Error("Request timed out");
+      }
+    } finally {
+      clearTimeout(timeout);
     }
 
     return body as ResponseBody;
