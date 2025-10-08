@@ -783,10 +783,6 @@ export class SevDeskClient {
 
     const tag = result.objects.find((tag) => tag.name === name);
 
-    if (!tag) {
-      throw new Error(`Tag with name ${name} not found`);
-    }
-
     return tag;
   }
 

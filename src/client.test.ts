@@ -652,7 +652,8 @@ test("Get tags", async () => {
 test("Get tag with name", async () => {
   const tag = await sevDeskClient.getTagWithName("NewTag");
 
-  assertIsTag(tag);
+  assert.is(tag, undefined);
+  assertIsTag(tag!);
 });
 
 // Manual test
