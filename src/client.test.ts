@@ -5,6 +5,7 @@ import * as assert from "uvu/assert";
 import { SevDeskClient } from "./client.js";
 import * as env from "./tests/env.js";
 import {
+  ModelBookkeepingSystemVersion,
   ModelCommunicationWay,
   ModelContact,
   ModelContactAddress,
@@ -688,6 +689,13 @@ test("Get parts", async () => {
   parts.forEach(assertIsPart);
 });
 
+test.only("Get bookkeeping system version", async () => {
+  const { objects: version } =
+    await sevDeskClient.getBookkeepingSystemVersion();
+
+  assertIsBookkeepingSystemVersion(version);
+});
+
 const assertIsInvoice = (invoice: ModelInvoice) => {
   assert.is(invoice.objectName, "Invoice");
 };
@@ -750,6 +758,16 @@ const assertIsStaticCountry = (user: ModelStaticCountry) => {
 
 const assertIsPart = (part: ModelPart) => {
   assert.is(part.objectName, "Part");
+};
+
+const assertIsBookkeepingSystemVersion = (
+  version: ModelBookkeepingSystemVersion
+) => {
+  assert.is(
+    version.version === ModelBookkeepingSystemVersion.VersionEnum.Version10 ||
+      version.version === ModelBookkeepingSystemVersion.VersionEnum.Version20,
+    true
+  );
 };
 
 test.run();

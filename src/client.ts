@@ -2,6 +2,7 @@ import NodeFormData from "form-data";
 import { dependencies } from "./dependencies.js";
 import { UnknownApiError } from "./errors.js";
 import {
+  ModelBookkeepingSystemVersion,
   ModelCommunicationWay,
   ModelContact,
   ModelContactAddress,
@@ -954,4 +955,19 @@ export class SevDeskClient {
 
   //   return textTemplates[language];
   // }
+
+  // -------------------------------------------------------
+  // Tools
+  // -------------------------------------------------------
+
+  /**
+   * Get the bookkeeping system version
+   */
+  async getBookkeepingSystemVersion() {
+    const url = this.urls.apiGetBookkeepingSystemVersionUrl();
+
+    return this.request<{
+      objects: Required<ModelBookkeepingSystemVersion>;
+    }>(url, { method: "GET" });
+  }
 }

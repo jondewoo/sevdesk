@@ -5692,3 +5692,22 @@ export interface ModelVoucherPos {
    */
   cateringTip?: number;
 }
+export namespace ModelBookkeepingSystemVersion {
+  export enum VersionEnum {
+    Version10 = "1.0",
+    Version20 = "2.0",
+  }
+}
+/**
+ *
+ * @export
+ * @interface ModelBookkeepingSystemVersion
+ */
+export interface ModelBookkeepingSystemVersion {
+  /**
+   *
+   * @type {string}
+   * @memberof ModelBookkeepingSystemVersion
+   */
+  version?: ModelBookkeepingSystemVersion.VersionEnum;
+}

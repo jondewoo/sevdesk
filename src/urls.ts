@@ -344,4 +344,15 @@ export class SevDeskUrls {
       query,
     });
   }
+
+  // -------------------------------------------------------
+  // Tools
+  // -------------------------------------------------------
+
+  apiGetBookkeepingSystemVersionUrl({ ...query }: Query = {}) {
+    return this.apiUrl({
+      path: `Tools/bookkeepingSystemVersion`,
+      query,
+    });
+  }
 }
