@@ -50,7 +50,7 @@ test("Get invoices", async () => {
 test("Get invoices with multiple tags", async () => {
   const tagIds = ["123456", "45678"];
 
-  const invoices = await sevDeskClient.getInvoicesWithTags(tagIds);
+  const { objects: invoices } = await sevDeskClient.getInvoicesWithTags(tagIds);
 
   assert.is(Array.isArray(invoices), true, "Should return an array");
 
@@ -234,7 +234,7 @@ test.skip("Mark invoice as sent", async () => {
 test("Get invoice XML", async () => {
   const invoiceId = "123456";
 
-  const objects = await sevDeskClient.getInvoiceXml({
+  const { objects } = await sevDeskClient.getInvoiceXml({
     id: invoiceId,
   });
 
@@ -389,7 +389,9 @@ test("Render a credit note", async () => {
 test("Get credit note XML", async () => {
   const creditNoteId = "123456";
 
-  const objects = await sevDeskClient.getCreditNoteXml({ id: creditNoteId });
+  const { objects } = await sevDeskClient.getCreditNoteXml({
+    id: creditNoteId,
+  });
 
   console.log(objects);
 
@@ -400,7 +402,9 @@ test("Get credit note XML", async () => {
 test("Get credit notes with tags", async () => {
   const tagIds = ["123456", "45678"];
 
-  const creditNotes = await sevDeskClient.getCreditNotesWithTags(tagIds);
+  const { objects: creditNotes } = await sevDeskClient.getCreditNotesWithTags(
+    tagIds
+  );
 
   console.log(creditNotes);
 
@@ -573,7 +577,7 @@ test("Get contact addresses (with contact ID)", async () => {
 test("Get contacts with multiple tags", async () => {
   const tagIds = ["123456", "45678"];
 
-  const contacts = await sevDeskClient.getContactsWithTags(tagIds);
+  const { objects: contacts } = await sevDeskClient.getContactsWithTags(tagIds);
 
   assert.is(Array.isArray(contacts), true, "Should return an array");
 

@@ -238,11 +238,10 @@ export class SevDeskClient {
    */
   async getInvoiceXml(params: UrlParamsFor<"apiGetInvoiceXmlUrl">) {
     const url = this.urls.apiGetInvoiceXmlUrl(params);
-    const { objects } = await this.request<{ objects: string }>(url, {
+
+    return this.request<{ objects: string }>(url, {
       method: "GET",
     });
-
-    return objects;
   }
 
   /**
@@ -260,9 +259,7 @@ export class SevDeskClient {
     );
 
     // Fetch invoices from SevDesk API
-    const { objects: invoices } = await this.getInvoices(queryParams);
-
-    return invoices;
+    return this.getInvoices(queryParams);
   }
 
   // -------------------------------------------------------
@@ -362,11 +359,10 @@ export class SevDeskClient {
    */
   async getCreditNoteXml(params: UrlParamsFor<"apiGetCreditNoteXmlUrl">) {
     const url = this.urls.apiGetCreditNoteXmlUrl(params);
-    const { objects } = await this.request<{ objects: string }>(url, {
+
+    return this.request<{ objects: string }>(url, {
       method: "GET",
     });
-
-    return objects;
   }
 
   /**
@@ -403,9 +399,7 @@ export class SevDeskClient {
     );
 
     // Fetch credit notes from SevDesk API
-    const { objects: creditNotes } = await this.getCreditNotes(queryParams);
-
-    return creditNotes;
+    return this.getCreditNotes(queryParams);
   }
 
   /**
@@ -587,9 +581,7 @@ export class SevDeskClient {
     );
 
     // Fetch contacts from SevDesk API
-    const { objects: contacts } = await this.getContacts(queryParams);
-
-    return contacts;
+    return this.getContacts(queryParams);
   }
 
   // -------------------------------------------------------
