@@ -4,6 +4,8 @@ import { test } from "uvu";
 import * as assert from "uvu/assert";
 import { SevDeskClient } from "./client.js";
 import * as env from "./tests/env.js";
+import { dependencies } from "./dependencies.js";
+import { UnknownApiError } from "./errors.js";
 import {
   ModelBookkeepingSystemVersion,
   ModelCommunicationWay,
@@ -693,11 +695,303 @@ test("Get parts", async () => {
   parts.forEach(assertIsPart);
 });
 
-test.only("Get bookkeeping system version", async () => {
+test("Get bookkeeping system version", async () => {
   const { objects: version } =
     await sevDeskClient.getBookkeepingSystemVersion();
 
   assertIsBookkeepingSystemVersion(version);
+});
+
+// -------------------------------------------------------
+// Unit tests for SevDeskClient.request method
+// -------------------------------------------------------
+
+test("request: successful response with JSON body", async () => {
+  const mockFetch = async () => {
+    return {
+      ok: true,
+      json: async () => ({ objects: [{ id: "123", name: "Test" }] }),
+    };
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key" });
+    const result = await client.request<{
+      objects: Array<{ id: string; name: string }>;
+    }>("https://example.com/api");
+
+    assert.is(result.objects.length, 1);
+    assert.is(result.objects[0].id, "123");
+    assert.is(result.objects[0].name, "Test");
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: successful response with empty object", async () => {
+  const mockFetch = async () => {
+    return {
+      ok: true,
+      json: async () => ({}),
+    };
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key" });
+    const result = await client.request<Record<string, never>>(
+      "https://example.com/api"
+    );
+
+    assert.is(typeof result, "object");
+    assert.is(Object.keys(result).length, 0);
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: throws UnknownApiError when response.ok is false", async () => {
+  const mockFetch = async () => {
+    return {
+      ok: false,
+      status: 404,
+      statusText: "Not Found",
+      json: async () => ({ message: "Resource not found" }),
+    };
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key" });
+
+    await client.request("https://example.com/api");
+
+    assert.unreachable("Should have thrown an error");
+  } catch (error) {
+    assert.instance(error, UnknownApiError);
+    assert.is((error as UnknownApiError).message, "Resource not found");
+    assert.is((error as UnknownApiError).response.ok, false);
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: throws error when response contains error object", async () => {
+  const mockFetch = async () => {
+    return {
+      ok: true,
+      json: async () => ({
+        error: {
+          message: "API error occurred",
+          code: "API_ERROR",
+        },
+      }),
+    };
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key" });
+
+    await client.request("https://example.com/api");
+
+    assert.unreachable("Should have thrown an error");
+  } catch (error) {
+    assert.instance(error, Error);
+    assert.is((error as Error).message, "API error occurred");
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: throws UnknownApiError when JSON parsing fails", async () => {
+  const mockFetch = async () => {
+    return {
+      ok: true,
+      json: async () => {
+        throw new Error("Unexpected token < in JSON at position 0");
+      },
+    };
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key" });
+
+    await client.request("https://example.com/api");
+
+    assert.unreachable("Should have thrown an error");
+  } catch (error) {
+    assert.instance(error, UnknownApiError);
+    assert.is(
+      (error as UnknownApiError).message,
+      "Unexpected token < in JSON at position 0"
+    );
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: throws UnknownApiError when response.ok is false and JSON parsing fails", async () => {
+  const mockFetch = async () => {
+    return {
+      ok: false,
+      status: 500,
+      statusText: "Internal Server Error",
+      json: async () => {
+        throw new Error("Invalid JSON");
+      },
+    };
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key" });
+
+    await client.request("https://example.com/api");
+
+    assert.unreachable("Should have thrown an error");
+  } catch (error) {
+    assert.instance(error, UnknownApiError);
+    assert.is((error as UnknownApiError).message, "Invalid JSON");
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: throws timeout error when request is aborted", async () => {
+  const mockFetch = async () => {
+    const error = new Error("The user aborted a request.");
+
+    throw error;
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key" });
+
+    await client.request("https://example.com/api", { timeout: 1000 });
+
+    assert.unreachable("Should have thrown an error");
+  } catch (error) {
+    assert.instance(error, Error);
+    assert.is((error as Error).message, "Request timed out");
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: re-throws network errors", async () => {
+  const networkError = new Error("Network request failed");
+
+  const mockFetch = async () => {
+    throw networkError;
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key" });
+
+    await client.request("https://example.com/api");
+
+    assert.unreachable("Should have thrown an error");
+  } catch (error) {
+    assert.is(error, networkError);
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: includes Authorization header with API key", async () => {
+  let capturedHeaders: HeadersInit | undefined;
+
+  const mockFetch = async (url: string, options?: RequestInit) => {
+    capturedHeaders = options?.headers;
+
+    return {
+      ok: true,
+      json: async () => ({ success: true }),
+    };
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-api-key-123" });
+
+    await client.request("https://example.com/api");
+
+    assert.is(capturedHeaders !== undefined, true);
+
+    const headers = capturedHeaders as Record<string, string>;
+
+    assert.is(headers.Authorization, "test-api-key-123");
+    assert.is(headers.Accept, "application/json");
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: merges custom headers with default headers", async () => {
+  let capturedHeaders: HeadersInit | undefined;
+
+  const mockFetch = async (url: string, options?: RequestInit) => {
+    capturedHeaders = options?.headers;
+
+    return {
+      ok: true,
+      json: async () => ({ success: true }),
+    };
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-api-key" });
+
+    await client.request("https://example.com/api", {
+      headers: { "Custom-Header": "custom-value" },
+    });
+
+    assert.is(capturedHeaders !== undefined, true);
+
+    const headers = capturedHeaders as Record<string, string>;
+
+    assert.is(headers.Authorization, "test-api-key");
+    assert.is(headers.Accept, "application/json");
+    assert.is(headers["Custom-Header"], "custom-value");
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
 });
 
 const assertIsInvoice = (invoice: ModelInvoice) => {
