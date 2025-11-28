@@ -99,6 +99,9 @@ export class SevDeskClient {
       ) {
         throw new Error("Request timed out");
       }
+
+      // Re-throw all other errors
+      throw error;
     } finally {
       clearTimeout(timeout);
     }
