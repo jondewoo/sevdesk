@@ -878,7 +878,32 @@ test("request: throws UnknownApiError when response.ok is false and JSON parsing
   }
 });
 
-test("request: throws timeout error when request is aborted", async () => {
+test("request: throws timeout error when request is aborted (client config timeout)", async () => {
+  const mockFetch = async () => {
+    const error = new Error("The user aborted a request.");
+
+    throw error;
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key", timeout: 1000 });
+
+    await client.request("https://example.com/api");
+
+    assert.unreachable("Should have thrown an error");
+  } catch (error) {
+    assert.instance(error, Error);
+    assert.is((error as Error).message, "Request timed out");
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: throws timeout error when request is aborted (request options timeout)", async () => {
   const mockFetch = async () => {
     const error = new Error("The user aborted a request.");
 

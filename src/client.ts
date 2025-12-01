@@ -33,6 +33,7 @@ type UrlParamsFor<MethodName extends keyof SevDeskUrls> = Parameters<
 export type SevDeskClientConfig = {
   apiKey: string;
   baseUrl?: string;
+  timeout?: number;
 };
 
 export class SevDeskClient {
@@ -40,10 +41,15 @@ export class SevDeskClient {
 
   readonly urls: SevDeskUrls;
 
-  constructor({ apiKey, baseUrl = DEFAULT_BASE_URL }: SevDeskClientConfig) {
+  constructor({
+    apiKey,
+    baseUrl = DEFAULT_BASE_URL,
+    timeout = 5000,
+  }: SevDeskClientConfig) {
     this.config = {
       apiKey,
       baseUrl,
+      timeout,
     };
     this.urls = new SevDeskUrls(baseUrl);
   }
@@ -57,7 +63,7 @@ export class SevDeskClient {
     const controller = new AbortController();
     const timeout = setTimeout(() => {
       controller.abort();
-    }, options.timeout ?? 5000);
+    }, options.timeout ?? this.config.timeout);
 
     let body;
 
