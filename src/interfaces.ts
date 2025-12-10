@@ -1726,6 +1726,12 @@ export interface ModelCreditNote {
    * @memberof ModelCreditNote
    */
   sendType?: string;
+  /**
+   * tags of the creditNote
+   * @type {ModelTag[]}
+   * @memberof ModelCreditNote
+   */
+  tags?: Array<ModelTag>;
 }
 /**
  * @export
@@ -2866,6 +2872,12 @@ export interface ModelInvoice {
    * @memberof ModelInvoice
    */
   deliveryDateUntil?: Date;
+  /**
+   * tags of the invoice
+   * @type {ModelTag[]}
+   * @memberof ModelInvoice
+   */
+  tags?: Array<ModelTag>;
 }
 
 /**
