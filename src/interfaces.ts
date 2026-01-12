@@ -1732,6 +1732,12 @@ export interface ModelCreditNote {
    * @memberof ModelCreditNote
    */
   tags?: Array<ModelTag>;
+  /**
+   *
+   * @type {number}
+   * @memberof ModelCreditNote
+   */
+  paidAmount?: number;
 }
 /**
  * @export
@@ -2878,6 +2884,12 @@ export interface ModelInvoice {
    * @memberof ModelInvoice
    */
   tags?: Array<ModelTag>;
+  /**
+   *
+   * @type {number}
+   * @memberof ModelInvoice
+   */
+  paidAmount?: number;
 }
 
 /**
