@@ -1734,10 +1734,10 @@ export interface ModelCreditNote {
   tags?: Array<ModelTag>;
   /**
    *
-   * @type {number}
+   * @type {ModelCheckAccountTransaction[]}
    * @memberof ModelCreditNote
    */
-  paidAmount?: number;
+  checkAccountTransactions?: Array<ModelCheckAccountTransaction>;
 }
 /**
  * @export
@@ -2890,6 +2890,12 @@ export interface ModelInvoice {
    * @memberof ModelInvoice
    */
   paidAmount?: number;
+  /**
+   *
+   * @type {ModelCheckAccountTransaction[]}
+   * @memberof ModelInvoice
+   */
+  checkAccountTransactions?: Array<ModelCheckAccountTransaction>;
 }
 
 /**
