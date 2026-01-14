@@ -1738,6 +1738,12 @@ export interface ModelCreditNote {
    * @memberof ModelCreditNote
    */
   checkAccountTransactions?: Array<ModelCheckAccountTransaction>;
+  /**
+   *
+   * @type {ModelCheckAccountTransactionLog[]}
+   * @memberof ModelCreditNote
+   */
+  checkAccountTransactionLogs?: Array<ModelCheckAccountTransactionLog>;
 }
 /**
  * @export
@@ -2896,6 +2902,12 @@ export interface ModelInvoice {
    * @memberof ModelInvoice
    */
   checkAccountTransactions?: Array<ModelCheckAccountTransaction>;
+  /**
+   *
+   * @type {ModelCheckAccountTransactionLog[]}
+   * @memberof ModelInvoice
+   */
+  checkAccountTransactionLogs?: Array<ModelCheckAccountTransactionLog>;
 }
 
 /**
