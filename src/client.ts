@@ -1,6 +1,6 @@
 import NodeFormData from "form-data";
 import { dependencies } from "./dependencies.js";
-import { UnknownApiError } from "./errors.js";
+import { RateLimitError, UnknownApiError } from "./errors.js";
 import {
   ModelBookkeepingSystemVersion,
   ModelCommunicationWay,
@@ -78,25 +78,100 @@ export class SevDeskClient {
         signal: controller.signal,
       });
 
-      let error;
+      if (response.ok) {
+        let error: Error | undefined;
 
-      try {
-        body = await response.json();
-      } catch (err: any) {
-        error = err;
-      }
+        try {
+          body = await response.json();
+        } catch (err: any) {
+          error = err;
+        }
 
-      if (body?.error !== undefined) {
-        const error = new Error();
+        if (body?.error !== undefined) {
+          const error = new Error();
 
-        Object.assign(error, body.error);
+          Object.assign(error, body.error);
 
-        throw error;
-      }
-      if (response.ok === false || error) {
-        const message = error?.message ?? body?.error?.message ?? body.message;
+          throw error;
+        }
+        if (error) {
+          const message = error.message;
 
-        throw new UnknownApiError(message, { response });
+          throw new UnknownApiError(message, {
+            response,
+          });
+        }
+      } else {
+        const rawText = await response.text();
+
+        let parsedBody: unknown = null;
+
+        try {
+          parsedBody = rawText ? JSON.parse(rawText) : null;
+        } catch {
+          // leave parsedBody null, use rawText for body
+        }
+
+        const errBody = parsedBody as {
+          error?: { message?: string };
+          message?: string;
+        } | null;
+        const message =
+          errBody?.error?.message ??
+          errBody?.message ??
+          `Unknown API error (${response.status})`;
+        const headers: Record<string, string> = {};
+
+        response.headers.forEach((value, key) => {
+          headers[key] = value;
+        });
+
+        if (response.status === 429) {
+          const retryAfterRaw = headers["retry-after"];
+          const parsed = retryAfterRaw ? parseInt(retryAfterRaw, 10) : 0;
+          const retryAfter = Math.max(0, Number.isFinite(parsed) ? parsed : 0);
+          const rateLimitBody = parsedBody as {
+            code?: string;
+            contact?: string;
+            reason?: string;
+            recommendation?: string;
+          } | null;
+
+          if (
+            rateLimitBody &&
+            typeof rateLimitBody.code === "string" &&
+            typeof rateLimitBody.reason === "string"
+          ) {
+            throw new RateLimitError(message, {
+              response,
+              status: response.status,
+              statusText: response.statusText,
+              headers,
+              body: parsedBody ?? rawText,
+              retryAfter,
+              rateLimitBody: {
+                code: rateLimitBody.code,
+                contact:
+                  typeof rateLimitBody.contact === "string"
+                    ? rateLimitBody.contact
+                    : "",
+                reason: rateLimitBody.reason,
+                recommendation:
+                  typeof rateLimitBody.recommendation === "string"
+                    ? rateLimitBody.recommendation
+                    : "",
+              },
+            });
+          }
+        }
+
+        throw new UnknownApiError(message, {
+          response,
+          status: response.status,
+          statusText: response.statusText,
+          headers,
+          body: parsedBody ?? rawText,
+        });
       }
     } catch (error) {
       if (

@@ -5,7 +5,7 @@ import * as assert from "uvu/assert";
 import { SevDeskClient } from "./client.js";
 import * as env from "./tests/env.js";
 import { dependencies } from "./dependencies.js";
-import { UnknownApiError } from "./errors.js";
+import { RateLimitError, UnknownApiError } from "./errors.js";
 import {
   ModelBookkeepingSystemVersion,
   ModelCommunicationWay,
@@ -763,7 +763,12 @@ test("request: throws UnknownApiError when response.ok is false", async () => {
       ok: false,
       status: 404,
       statusText: "Not Found",
-      json: async () => ({ message: "Resource not found" }),
+      text: async () => JSON.stringify({ message: "Resource not found" }),
+      headers: {
+        forEach: (fn: (value: string, key: string) => void) => {
+          fn("application/json", "content-type");
+        },
+      },
     };
   };
 
@@ -781,6 +786,14 @@ test("request: throws UnknownApiError when response.ok is false", async () => {
     assert.instance(error, UnknownApiError);
     assert.is((error as UnknownApiError).message, "Resource not found");
     assert.is((error as UnknownApiError).response.ok, false);
+    assert.is((error as UnknownApiError).status, 404);
+    assert.is((error as UnknownApiError).statusText, "Not Found");
+    assert.ok((error as UnknownApiError).responseBody);
+    assert.is(
+      ((error as UnknownApiError).responseBody as { message: string } | null)
+        ?.message,
+      "Resource not found"
+    );
   } finally {
     dependencies.fetch = originalFetch;
   }
@@ -848,14 +861,15 @@ test("request: throws UnknownApiError when JSON parsing fails", async () => {
   }
 });
 
-test("request: throws UnknownApiError when response.ok is false and JSON parsing fails", async () => {
+test("request: throws UnknownApiError when response.ok is false and body is non-JSON", async () => {
   const mockFetch = async () => {
     return {
       ok: false,
       status: 500,
       statusText: "Internal Server Error",
-      json: async () => {
-        throw new Error("Invalid JSON");
+      text: async () => "<html>Error page</html>",
+      headers: {
+        forEach: (_fn: (value: string, key: string) => void) => {},
       },
     };
   };
@@ -872,7 +886,101 @@ test("request: throws UnknownApiError when response.ok is false and JSON parsing
     assert.unreachable("Should have thrown an error");
   } catch (error) {
     assert.instance(error, UnknownApiError);
-    assert.is((error as UnknownApiError).message, "Invalid JSON");
+    assert.is((error as UnknownApiError).message, "Unknown API error (500)");
+    assert.is((error as UnknownApiError).status, 500);
+    assert.is(
+      (error as UnknownApiError).responseBody,
+      "<html>Error page</html>"
+    );
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: throws UnknownApiError with status in message when response.ok is false and body has no message", async () => {
+  const mockFetch = async () => {
+    return {
+      ok: false,
+      status: 429,
+      statusText: "Too Many Requests",
+      text: async () => "{}",
+      headers: {
+        forEach: (fn: (value: string, key: string) => void) => {
+          fn("60", "retry-after");
+        },
+      },
+    };
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key" });
+
+    await client.request("https://example.com/api");
+
+    assert.unreachable("Should have thrown an error");
+  } catch (error) {
+    assert.instance(error, UnknownApiError);
+    assert.is((error as UnknownApiError).message, "Unknown API error (429)");
+    assert.is((error as UnknownApiError).status, 429);
+    assert.is((error as UnknownApiError).statusText, "Too Many Requests");
+    assert.is((error as UnknownApiError).headers?.["retry-after"], "60");
+    assert.ok((error as UnknownApiError).responseBody);
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: throws RateLimitError when response is 429 with rate limit body", async () => {
+  const rateLimitBody = {
+    code: "sec_rate_limit_block",
+    contact: "security@sevdesk.de",
+    reason:
+      "You request has been blocked due exceeding the allowed rate limit triggering one of the security solutions protecting sevdesk.",
+    recommendation:
+      "Check that your requests are not exceeding our rate limit to prevent being blocked indefinetly. If think a higher rate limit is appropriate for you, please contact us.",
+  };
+
+  const mockFetch = async () => {
+    return {
+      ok: false,
+      status: 429,
+      statusText: "Too Many Requests",
+      text: async () => JSON.stringify(rateLimitBody),
+      headers: {
+        forEach: (fn: (value: string, key: string) => void) => {
+          fn("600", "retry-after");
+        },
+      },
+    };
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key" });
+
+    await client.request("https://example.com/api");
+
+    assert.unreachable("Should have thrown an error");
+  } catch (error) {
+    assert.instance(error, RateLimitError);
+    assert.instance(error, UnknownApiError);
+    assert.is((error as RateLimitError).message, "Unknown API error (429)");
+    assert.is((error as RateLimitError).status, 429);
+    assert.is((error as RateLimitError).retryAfter, 600);
+
+    const body = (error as RateLimitError).rateLimitBody;
+
+    assert.is(body.code, rateLimitBody.code);
+    assert.is(body.contact, rateLimitBody.contact);
+    assert.is(body.reason, rateLimitBody.reason);
+    assert.is(body.recommendation, rateLimitBody.recommendation);
   } finally {
     dependencies.fetch = originalFetch;
   }
