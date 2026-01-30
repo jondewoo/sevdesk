@@ -60,10 +60,7 @@ export class SevDeskClient {
   ) {
     const { apiKey } = this.config;
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => {
-      controller.abort();
-    }, options.timeout ?? this.config.timeout);
+    const signal = AbortSignal.timeout(options.timeout ?? this.config.timeout);
 
     let body;
 
@@ -75,7 +72,7 @@ export class SevDeskClient {
           Accept: "application/json",
           ...options.headers,
         },
-        signal: controller.signal,
+        signal,
       });
 
       if (response.ok) {
@@ -173,18 +170,22 @@ export class SevDeskClient {
           body: parsedBody ?? rawText,
         });
       }
-    } catch (error) {
-      if (
-        error instanceof Error &&
-        error.message === "The user aborted a request."
-      ) {
+    } catch (error: unknown) {
+      const isAbortOrTimeout =
+        (typeof error === "object" &&
+          error !== null &&
+          "name" in error &&
+          ((error as { name: string }).name === "TimeoutError" ||
+            (error as { name: string }).name === "AbortError")) ||
+        (error instanceof Error &&
+          (error.message === "The user aborted a request." ||
+            error.message === "The operation was aborted."));
+
+      if (isAbortOrTimeout) {
         throw new Error("Request timed out");
       }
 
-      // Re-throw all other errors
       throw error;
-    } finally {
-      clearTimeout(timeout);
     }
 
     return body as ResponseBody;

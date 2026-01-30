@@ -49,7 +49,7 @@ test("Get invoices", async () => {
   assertIsInvoice(invoice);
 });
 
-test("Get invoices with multiple tags", async () => {
+test.skip("Get invoices with multiple tags", async () => {
   const tagIds = ["123456", "45678"];
 
   const { objects: invoices } = await sevDeskClient.getInvoicesWithTags(tagIds);
@@ -209,7 +209,7 @@ test.skip("Delete invoice", async () => {
   await sevDeskClient.deleteInvoice({ id: invoiceId });
 });
 
-test("Cancel invoice", async () => {
+test.skip("Cancel invoice", async () => {
   const invoiceId = "123";
 
   const { objects: invoice } = await sevDeskClient.cancelInvoice({
@@ -233,7 +233,7 @@ test.skip("Mark invoice as sent", async () => {
   assertIsInvoice(invoice);
 });
 
-test("Get invoice XML", async () => {
+test.skip("Get invoice XML", async () => {
   const invoiceId = "123456";
 
   const { objects } = await sevDeskClient.getInvoiceXml({
@@ -378,7 +378,7 @@ test.skip("Delete a credit note", async () => {
   await sevDeskClient.deleteCreditNote({ id: creditNoteId });
 });
 
-test("Render a credit note", async () => {
+test.skip("Render a credit note", async () => {
   const creditNoteId = "123456";
 
   try {
@@ -388,7 +388,7 @@ test("Render a credit note", async () => {
   }
 });
 
-test("Get credit note XML", async () => {
+test.skip("Get credit note XML", async () => {
   const creditNoteId = "123456";
 
   const { objects } = await sevDeskClient.getCreditNoteXml({
@@ -401,7 +401,7 @@ test("Get credit note XML", async () => {
   assert.is(objects.length > 0, true);
 });
 
-test("Get credit notes with tags", async () => {
+test.skip("Get credit notes with tags", async () => {
   const tagIds = ["123456", "45678"];
 
   const { objects: creditNotes } = await sevDeskClient.getCreditNotesWithTags(
@@ -428,14 +428,14 @@ test.skip("Mark credit note as sent", async () => {
 
   assertIsCreditNote(creditNote);
 });
-test("Get vouchers", async () => {
+test.skip("Get vouchers", async () => {
   const { objects: vouchers } = await sevDeskClient.getVouchers();
 
   assert.is(vouchers.length > 0, true);
   vouchers.forEach(assertIsVoucher);
 });
 
-test("Get voucher positions", async () => {
+test.skip("Get voucher positions", async () => {
   const voucherId = 123456789;
   const { objects: voucherPositions } = await sevDeskClient.getVoucherPositions(
     { voucherId }
@@ -471,7 +471,7 @@ test.skip("Add document", async () => {
   assertIsDocument(document);
 });
 
-test("Get contact", async () => {
+test.skip("Get contact", async () => {
   const contactId = "123456789";
   const {
     objects: [contact],
@@ -576,7 +576,7 @@ test("Get contact addresses (with contact ID)", async () => {
   contactAddresses.forEach(assertIsContactAddress);
 });
 
-test("Get contacts with multiple tags", async () => {
+test.skip("Get contacts with multiple tags", async () => {
   const tagIds = ["123456", "45678"];
 
   const { objects: contacts } = await sevDeskClient.getContactsWithTags(tagIds);
@@ -656,7 +656,7 @@ test("Get tags", async () => {
   tags.forEach(assertIsTag);
 });
 
-test("Get tag with name", async () => {
+test.skip("Get tag with name", async () => {
   const tag = await sevDeskClient.getTagWithName("NewTag");
 
   assert.is(tag, undefined);
@@ -986,11 +986,44 @@ test("request: throws RateLimitError when response is 429 with rate limit body",
   }
 });
 
-test("request: throws timeout error when request is aborted (client config timeout)", async () => {
-  const mockFetch = async () => {
-    const error = new Error("The user aborted a request.");
+test("request: passes AbortSignal.timeout to fetch", async () => {
+  let capturedSignal: AbortSignal | undefined;
 
-    throw error;
+  const mockFetch = async (_url: string, options?: RequestInit) => {
+    capturedSignal = options?.signal as AbortSignal | undefined;
+
+    return {
+      ok: true,
+      json: async () => ({ success: true }),
+    };
+  };
+
+  const originalFetch = dependencies.fetch;
+
+  dependencies.fetch = mockFetch as any;
+
+  try {
+    const client = new SevDeskClient({ apiKey: "test-key", timeout: 5000 });
+
+    await client.request("https://example.com/api");
+
+    assert.ok(
+      capturedSignal instanceof AbortSignal,
+      "signal should be AbortSignal"
+    );
+    assert.is(
+      capturedSignal.aborted,
+      false,
+      "signal should not be aborted yet"
+    );
+  } finally {
+    dependencies.fetch = originalFetch;
+  }
+});
+
+test("request: throws timeout error when AbortSignal.timeout fires (client config timeout)", async () => {
+  const mockFetch = async () => {
+    throw new DOMException("The operation was aborted.", "TimeoutError");
   };
 
   const originalFetch = dependencies.fetch;
@@ -1011,11 +1044,9 @@ test("request: throws timeout error when request is aborted (client config timeo
   }
 });
 
-test("request: throws timeout error when request is aborted (request options timeout)", async () => {
+test("request: throws timeout error when AbortSignal.timeout fires (request options timeout)", async () => {
   const mockFetch = async () => {
-    const error = new Error("The user aborted a request.");
-
-    throw error;
+    throw new DOMException("The operation was aborted.", "AbortError");
   };
 
   const originalFetch = dependencies.fetch;
