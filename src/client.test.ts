@@ -15,6 +15,7 @@ import {
   ModelDocument,
   ModelDocumentFolder,
   ModelInvoice,
+  ModelInvoicePos,
   ModelPart,
   ModelPaymentMethod,
   ModelSevUser,
@@ -47,6 +48,25 @@ test("Get invoices", async () => {
   } = await sevDeskClient.getInvoice({ id: firstInvoice.id });
 
   assertIsInvoice(invoice);
+});
+
+test("Get invoice positions", async () => {
+  const { objects: invoices } = await sevDeskClient.getInvoices();
+
+  assert.is(invoices.length > 0, true);
+
+  const [firstInvoice] = invoices;
+  const { objects: positions, total } = await sevDeskClient.getInvoicePositions(
+    {
+      id: firstInvoice.id,
+    }
+  );
+
+  assert.is(Array.isArray(positions), true);
+  positions.forEach(assertIsInvoicePos);
+  if (total !== undefined) {
+    assert.type(total, "number");
+  }
 });
 
 test.skip("Get invoices with multiple tags", async () => {
@@ -1160,6 +1180,10 @@ test("request: merges custom headers with default headers", async () => {
 
 const assertIsInvoice = (invoice: ModelInvoice) => {
   assert.is(invoice.objectName, "Invoice");
+};
+
+const assertIsInvoicePos = (position: ModelInvoicePos) => {
+  assert.is(position.objectName, "InvoicePos");
 };
 
 const assertIsCreditNote = (creditNote: ModelCreditNote) => {

@@ -46,6 +46,13 @@ export class SevDeskUrls {
     return this.apiUrl({ path: `Invoice/${id}`, query });
   }
 
+  apiGetInvoicePositionsUrl({
+    id,
+    ...query
+  }: { id: string } & DefaultCollectionQuery & Query) {
+    return this.apiUrl({ path: `Invoice/${id}/getPositions`, query });
+  }
+
   apiGetNextInvoiceNumberUrl({
     ...query
   }: { invoiceType: string; useNextNumber: boolean } & Query) {

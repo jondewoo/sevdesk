@@ -221,6 +221,20 @@ export class SevDeskClient {
   }
 
   /**
+   * Get the positions of a specified invoice.
+   *
+   * @see https://api.sevdesk.de/#tag/Invoice/operation/getInvoicePositionsById
+   */
+  async getInvoicePositions(params: UrlParamsFor<"apiGetInvoicePositionsUrl">) {
+    const url = this.urls.apiGetInvoicePositionsUrl(params);
+
+    return this.request<{
+      total?: number;
+      objects: Array<Required<ModelInvoicePos>>;
+    }>(url, { method: "GET" });
+  }
+
+  /**
    * Get the next invoice number
    */
   async getNextInvoiceNumber(
