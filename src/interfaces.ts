@@ -1209,7 +1209,7 @@ export interface ModelContact {
    * @type {number}
    * @memberof ModelContact
    */
-  customerNumber?: number;
+  customerNumber?: string;
   /**
    *
    * @type {ModelContact}
