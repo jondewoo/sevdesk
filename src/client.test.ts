@@ -694,6 +694,22 @@ test.skip("Create a new tag", async () => {
   assertIsTagRelation(relation);
 });
 
+// Manual test
+// If you run this test, you need to clean up manually afterwards
+test.skip("Delete tag", async () => {
+  const tagId = "123456";
+
+  await sevDeskClient.deleteTag({ id: tagId });
+});
+
+// Manual test
+// If you run this test, you need to clean up manually afterwards
+test.skip("Delete tag relation", async () => {
+  const tagRelationId = "123456";
+
+  await sevDeskClient.deleteTagRelation({ id: tagRelationId });
+});
+
 test("Get users", async () => {
   const { objects: users } = await sevDeskClient.getSevUsers();
 
