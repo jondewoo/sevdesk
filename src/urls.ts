@@ -352,6 +352,14 @@ export class SevDeskUrls {
     });
   }
 
+  apiDeleteTagUrl({ id, ...query }: { id: string } & Query) {
+    return this.apiUrl({ path: `Tag/${id}`, query });
+  }
+
+  apiDeleteTagRelationUrl({ id, ...query }: { id: string } & Query) {
+    return this.apiUrl({ path: `TagRelation/${id}`, query });
+  }
+
   // -------------------------------------------------------
   // Tools
   // -------------------------------------------------------

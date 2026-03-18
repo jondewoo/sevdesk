@@ -891,6 +891,24 @@ export class SevDeskClient {
     });
   }
 
+  /**
+   * Delete a tag
+   */
+  async deleteTag(params: UrlParamsFor<"apiDeleteTagUrl">) {
+    const url = this.urls.apiDeleteTagUrl(params);
+
+    return this.request<{ objects: [null] }>(url, { method: "DELETE" });
+  }
+
+  /**
+   * Delete a tag relation
+   */
+  async deleteTagRelation(params: UrlParamsFor<"apiDeleteTagRelationUrl">) {
+    const url = this.urls.apiDeleteTagRelationUrl(params);
+
+    return this.request<{ objects: [null] }>(url, { method: "DELETE" });
+  }
+
   // -------------------------------------------------------
   // SevUser
   // -------------------------------------------------------
