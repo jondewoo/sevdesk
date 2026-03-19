@@ -1200,10 +1200,10 @@ export interface ModelContact {
   name?: string;
   /**
    * status of the contact
-   * @type {number}
+   * @type {string}
    * @memberof ModelContact
    */
-  status?: number;
+  status?: string;
   /**
    * customer number of the contact
    * @type {number}
@@ -1548,10 +1548,10 @@ export interface ModelCreditNote {
   creditNoteDate?: Date;
   /**
    * please have a look in <a href='#tag/CreditNote/Status-of-credit-notes'>status of credit note</a> to see what the different status codes mean
-   * @type {number}
+   * @type {string}
    * @memberof ModelCreditNote
    */
-  status?: number;
+  status?: string;
   /**
    * normally consist of prefix plus the creditNote number
    * @type {string}
@@ -2616,10 +2616,10 @@ export interface ModelInvoice {
   deliveryDate?: Date;
   /**
    * status of the invoice
-   * @type {number}
+   * @type {string}
    * @memberof ModelInvoice
    */
-  status?: number;
+  status?: string;
   /**
    *
    * @type {boolean}
