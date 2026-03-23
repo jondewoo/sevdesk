@@ -668,7 +668,10 @@ export class SevDeskClient {
    * Get an overview of all contacts based on tagIds
    *
    */
-  async getContactsWithTags(tagIds: Array<string>) {
+  async getContactsWithTags(
+    tagIds: Array<string>,
+    params: UrlParamsFor<"apiGetContactsUrl"> = {}
+  ) {
     const queryParams = tagIds.reduce<Record<string, string>>(
       (params, tagId, index) => {
         params[`tags[${index}][id]`] = tagId;
@@ -676,7 +679,7 @@ export class SevDeskClient {
 
         return params;
       },
-      {}
+      params
     );
 
     // Fetch contacts from SevDesk API
