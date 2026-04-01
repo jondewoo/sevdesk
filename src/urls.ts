@@ -24,11 +24,12 @@ export class SevDeskUrls {
     const url = new URL(path, `${this.baseUrl}api/v${version}/`);
 
     Object.entries(query).forEach(([key, value]) => {
-      const values = Array.isArray(value) ? value : [value];
-
-      values.forEach((value) => {
+      if (Array.isArray(value)) {
+        if (value.length === 0) return;
+        url.searchParams.append(key, value.join(","));
+      } else {
         url.searchParams.append(key, value);
-      });
+      }
     });
 
     return url.toString();
